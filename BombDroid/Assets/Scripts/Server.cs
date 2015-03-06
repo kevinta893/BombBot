@@ -11,7 +11,7 @@ public class Server : MonoBehaviour
 
 
 
-
+	private Quaternion cameraRotation;
 
 	// Use this for initialization
 	void Start ()
@@ -41,6 +41,7 @@ public class Server : MonoBehaviour
 				GUILayout.Label("Server");
 				GUILayout.Label("My IP: " + Network.player.ipAddress);
 				GUILayout.Label("Connections: " + Network.connections.Length);
+				GUILayout.Label("Rotation: " + cameraRotation);
 				
 				if(GUILayout.Button("Logout"))
 				{
@@ -100,5 +101,11 @@ public class Server : MonoBehaviour
 	{
 		Network.Disconnect (250);
 		return true;
+	}
+
+	[RPC]
+	void UpdateCamera(Quaternion rotation)
+	{
+		cameraRotation = rotation;
 	}
 }
