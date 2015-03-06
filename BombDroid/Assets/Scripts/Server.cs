@@ -16,13 +16,40 @@ public class Server : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		InitializeServer ();
+
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 	
+	}
+
+	void OnGUI() 
+	{
+		if (Network.peerType == NetworkPeerType.Disconnected) 
+		{
+			if (GUILayout.Button("Start Server", GUILayout.Height(100)))
+			{
+				InitializeServer ();
+			}
+		}
+		else 
+		{
+			if(Network.peerType == NetworkPeerType.Server)
+			{
+				GUILayout.Label("Server");
+				GUILayout.Label("My IP: " + Network.player.ipAddress);
+				GUILayout.Label("Connections: " + Network.connections.Length);
+				
+				if(GUILayout.Button("Logout"))
+				{
+					Network.Disconnect(250);
+				}
+			}
+
+
+		}
 	}
 
 	bool ConnectToServer (string ip)

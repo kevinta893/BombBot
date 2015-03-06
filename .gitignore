@@ -17,3 +17,5 @@
 sysinfo.txt
 *.csproj
 *.sln
+BombDroid/BombDroid.userprefs
+*.userprefs
