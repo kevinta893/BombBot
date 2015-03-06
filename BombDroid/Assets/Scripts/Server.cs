@@ -16,7 +16,7 @@ public class Server : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		initializeServer ();
+		InitializeServer ();
 	}
 	
 	// Update is called once per frame
@@ -25,7 +25,7 @@ public class Server : MonoBehaviour
 	
 	}
 
-	bool connectToServer (string ip)
+	bool ConnectToServer (string ip)
 	{
 		if (Network.peerType == NetworkPeerType.Disconnected)
 		{
@@ -45,7 +45,7 @@ public class Server : MonoBehaviour
 
 
 	//attempt to intialize server, returns true if server started, false otherwise
-	public bool initializeServer ()
+	public bool InitializeServer ()
 	{
 
 		//make only on no connection
@@ -69,7 +69,7 @@ public class Server : MonoBehaviour
 				
 	}
 
-	public bool stopServer ()
+	public bool StopServer ()
 	{
 		Network.Disconnect (250);
 		return true;
