@@ -50,12 +50,5 @@ public class ServerMenu : MonoBehaviour {
 	public void SendCameraData (Quaternion rotation) {
 		networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
 	}
-
-	[RPC]
-	void UpdateCamera(Quaternion rotation)
-	{
-		camera.transform.rotation = rotation;
-	}
-
-
+	
 }
