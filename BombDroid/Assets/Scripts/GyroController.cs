@@ -14,9 +14,9 @@ public class GyroController : MonoBehaviour
 	private const float lowPassFilterFactor = 0.2f;
 	
 	private readonly Quaternion baseIdentity =  Quaternion.Euler(90, 0, 0);
-	private readonly Quaternion landscapeRight =  Quaternion.Euler(0, 0, 90);
-	private readonly Quaternion landscapeLeft =  Quaternion.Euler(0, 0, -90);
-	private readonly Quaternion upsideDown =  Quaternion.Euler(0, 0, 180);
+	//private readonly Quaternion landscapeRight =  Quaternion.Euler(0, 0, 90);
+	//private readonly Quaternion landscapeLeft =  Quaternion.Euler(0, 0, -90);
+	//private readonly Quaternion upsideDown =  Quaternion.Euler(0, 0, 180);
 	
 	private Quaternion cameraBase =  Quaternion.identity;
 	private Quaternion calibration =  Quaternion.identity;
@@ -47,8 +47,11 @@ public class GyroController : MonoBehaviour
 			return;
 		transform.rotation = Quaternion.Slerp(transform.rotation,
 		                                      cameraBase * ( ConvertRotation(referanceRotation * Input.gyro.attitude) * Quaternion.identity), lowPassFilterFactor);
-		
-		server.SendCameraData(transform.rotation);
+
+		if (Network.peerType != NetworkPeerType.Disconnected)
+		{
+			server.SendCameraData(transform.rotation);
+		}
 	}
 	
 	protected void OnGUI()

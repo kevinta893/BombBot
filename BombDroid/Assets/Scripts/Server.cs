@@ -19,8 +19,15 @@ public class Server : MonoBehaviour
 	public Image indicator;
 
 	private Vector3 CENTER_RADAR; //= new Vector3(-181.4f, -14.6f, 0.0f);
-	private const float RADIUS = 6.0f;
+	private const float RADIUS = 10.0f;
 	public Text pointer;
+
+	struct BombObject{
+		public int id;
+		public int type;
+		public float radians;
+		public GameObject obj;
+	}
 
 	// Use this for initialization
 	void Start ()
@@ -120,7 +127,9 @@ public class Server : MonoBehaviour
 		{	// start server if not on
 			if (InitializeServer())
 				startServerButtonText.text = "Disconnect";
-			//indicator.transform.Translate(0,150,0);
+
+			//networkView.RPC("AddBomb", RPCMode.All, 1, 0, 90.0f, null);
+
 		} 
 		else if (Network.peerType == NetworkPeerType.Server) 
 		{	// stop server if on
