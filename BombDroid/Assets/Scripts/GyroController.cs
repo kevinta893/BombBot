@@ -1,4 +1,4 @@
-// ***********************************************************
+﻿// ***********************************************************
 // Written by Heyworks Unity Studio http://unity.heyworks.com/
 // ***********************************************************
 using UnityEngine;
@@ -6,13 +6,13 @@ using UnityEngine;
 /// <summary>
 /// Gyroscope controller that works with any device orientation.
 /// </summary>
-public class GyroController2 : MonoBehaviour 
+public class GyroController : MonoBehaviour 
 {
 	#region [Private fields]
-
+	
 	private bool gyroEnabled = true;
 	private const float lowPassFilterFactor = 0.2f;
-
+	
 	private readonly Quaternion baseIdentity =  Quaternion.Euler(90, 0, 0);
 	private readonly Quaternion landscapeRight =  Quaternion.Euler(0, 0, 90);
 	private readonly Quaternion landscapeLeft =  Quaternion.Euler(0, 0, -90);
@@ -22,53 +22,55 @@ public class GyroController2 : MonoBehaviour
 	private Quaternion calibration =  Quaternion.identity;
 	private Quaternion baseOrientation =  Quaternion.Euler(90, 0, 0);
 	private Quaternion baseOrientationRotationFix =  Quaternion.identity;
-
+	
 	private Quaternion referanceRotation = Quaternion.identity;
 	private bool debug = true;
-
-	private ServerMenu server;
-
+	
+	
+	
 	#endregion
-
+	
 	#region [Unity events]
+
+	public ClientNetwork server;
 
 	protected void Start () 
 	{
 		AttachGyro();
-
-		server = (ServerMenu)GameObject.Find ("Server Module").GetComponent ("ServerMenu");
+		
+		
 	}
-
+	
 	protected void Update() 
 	{
 		if (!gyroEnabled)
 			return;
 		transform.rotation = Quaternion.Slerp(transform.rotation,
-			cameraBase * ( ConvertRotation(referanceRotation * Input.gyro.attitude) * Quaternion.identity), lowPassFilterFactor);
-
-		server.SendCameraData (transform.rotation);
+		                                      cameraBase * ( ConvertRotation(referanceRotation * Input.gyro.attitude) * Quaternion.identity), lowPassFilterFactor);
+		
+		server.SendCameraData(transform.rotation);
 	}
-
+	
 	protected void OnGUI()
 	{
 		GUIStyle androidStyle = new GUIStyle ();
 		androidStyle.fontSize = 30;
-
+		
 		if (!debug)
 			return;
-
+		
 		GUILayout.Label("Orientation: " + Screen.orientation, androidStyle);
 		GUILayout.Label("Calibration: " + calibration, androidStyle);
 		GUILayout.Label("Camera base: " + cameraBase, androidStyle);
 		GUILayout.Label("input.gyro.attitude: " + Input.gyro.attitude, androidStyle);
 		GUILayout.Label("transform.rotation: " + transform.rotation, androidStyle);
 		GUILayout.Label ("My IP: " + Network.player.ipAddress, androidStyle);
-
+		
 		if (GUILayout.Button("On/off gyro: " + Input.gyro.enabled, GUILayout.Height(100)))
 		{
 			Input.gyro.enabled = !Input.gyro.enabled;
 		}
-
+		
 		if (GUILayout.Button("On/off gyro controller: " + gyroEnabled, GUILayout.Height(100)))
 		{
 			if (gyroEnabled)
@@ -102,11 +104,11 @@ public class GyroController2 : MonoBehaviour
 		}
 		*/
 	}
-
+	
 	#endregion
-
+	
 	#region [Public methods]
-
+	
 	/// <summary>
 	/// Attaches gyro controller to the transform.
 	/// </summary>
@@ -118,7 +120,7 @@ public class GyroController2 : MonoBehaviour
 		UpdateCameraBaseRotation(true);
 		RecalculateReferenceRotation();
 	}
-
+	
 	/// <summary>
 	/// Detaches gyro controller from the transform
 	/// </summary>
@@ -126,11 +128,11 @@ public class GyroController2 : MonoBehaviour
 	{
 		gyroEnabled = false;
 	}
-
+	
 	#endregion
-
+	
 	#region [Private methods]
-
+	
 	/// <summary>
 	/// Update the gyro calibration.
 	/// </summary>
@@ -204,7 +206,7 @@ public class GyroController2 : MonoBehaviour
 	{
 		baseOrientation = Quaternion.identity * baseIdentity;
 	}
-
+	
 	/// <summary>
 	/// Recalculates reference rotation.
 	/// </summary>
@@ -212,6 +214,6 @@ public class GyroController2 : MonoBehaviour
 	{
 		referanceRotation = Quaternion.Inverse(baseOrientation)*Quaternion.Inverse(calibration);
 	}
-
+	
 	#endregion
 }
