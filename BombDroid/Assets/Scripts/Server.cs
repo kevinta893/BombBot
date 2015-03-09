@@ -18,14 +18,14 @@ public class Server : MonoBehaviour
 	public Text startServerButtonText;
 	public Image indicator;
 
-	private Vector3 CENTER_RADAR = new Vector3(-181.4f, -14.6f, 0.0f);
-	private const float RADIUS = 15.0f;
+	private Vector3 CENTER_RADAR; //= new Vector3(-181.4f, -14.6f, 0.0f);
+	private const float RADIUS = 1f;
 	public Text pointer;
 
 	// Use this for initialization
 	void Start ()
 	{
-
+		CENTER_RADAR = indicator.transform.position;
 	}
 	
 	// Update is called once per frame
@@ -45,12 +45,21 @@ public class Server : MonoBehaviour
 						
 			Vector3 textPos = CENTER_RADAR;
 
-			Vector3 direction = GetForwardVector(cameraRotation);
+			//Vector3 direction = GetForwardVector(cameraRotation);
+			Vector3 direction = new Vector3(1,0,0);
+
+			/*float temp = direction.y;
+			direction.y = direction.z;
+			direction.z = temp;
+			//direction.y *= -1;*/
+
 			direction.Normalize();
 			textPos = textPos + (direction * RADIUS);
-			indicator.transform.position = new Vector3(0,0,0);
-			indicator.transform.Translate(new Vector3(textPos.x, textPos.z, 0));
+			indicator.transform.position = new Vector3(textPos.x, textPos.z, 0);
 
+			//indicator.transform.Translate(new Vector3(textPos.x, textPos.z, 0));
+
+			debugText.text = indicator.transform.position.ToString();
 		}
 		
 		
