@@ -18,6 +18,10 @@ public class Server : MonoBehaviour
 	public Text startServerButtonText;
 	public Image indicator;
 
+	private Vector3 CENTER_RADAR = new Vector3(-181.4f, -14.6f, 0.0f);
+	private const float RADIUS = 15.0f;
+	public Text pointer;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -38,12 +42,28 @@ public class Server : MonoBehaviour
 				
 			debugText.text = "Rotation: " + cameraRotation +
 							"\n" + cameraRotation.y;
-							
+						
+			Vector3 textPos = CENTER_RADAR;
+
+			Vector3 direction = GetForwardVector(cameraRotation);
+			direction.Normalize();
+			textPos = textPos + (direction * RADIUS);
+			indicator.transform.position = new Vector3(0,0,0);
+			indicator.transform.Translate(textPos);
+
 		}
 		
 		
 	}
 
+
+	//Taken from http://nic-gamedev.blogspot.ca/2011/11/quaternion-math-getting-local-axis.html?m=1
+	Vector3 GetForwardVector(Quaternion q) 
+	{
+		return new Vector3( 2 * (q.x * q.z + q.w * q.y), 
+		            2 * (q.y * q.x - q.w * q.x),
+		            1 - 2 * (q.x * q.x + q.y * q.y));
+	}
 	/*void OnGUI() 
 	{
 		if (Network.peerType == NetworkPeerType.Disconnected) 
@@ -99,7 +119,7 @@ public class Server : MonoBehaviour
 		{	// start server if not on
 			if (InitializeServer())
 				startServerButtonText.text = "Disconnect";
-			indicator.transform.Translate(0,150,0);
+			//indicator.transform.Translate(0,150,0);
 		} 
 		else if (Network.peerType == NetworkPeerType.Server) 
 		{	// stop server if on
