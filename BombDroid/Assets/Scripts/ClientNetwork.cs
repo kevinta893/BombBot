@@ -46,7 +46,11 @@ public class ClientNetwork : MonoBehaviour {
 			}
 		}
 	}
-	
+
+
+
+	//================================================================================
+	//To server functions
 	public void SendCameraData (Quaternion rotation) {
 		networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
 	}
@@ -57,5 +61,9 @@ public class ClientNetwork : MonoBehaviour {
 		camera.transform.rotation = rotation;
 	}
 	
-	
+
+	//===============================================================================
+	//From server functions
+
+
 }

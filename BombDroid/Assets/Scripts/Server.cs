@@ -103,9 +103,21 @@ public class Server : MonoBehaviour
 		return true;
 	}
 
+
+
+	//====================================================
+	//From client methods
+
 	[RPC]
 	void UpdateCamera(Quaternion rotation)
 	{
 		cameraRotation = rotation;
 	}
+
+
+	//====================================================
+	//To Client methods
+
+
+
 }
