@@ -16,6 +16,7 @@ public class Server : MonoBehaviour
 	public Text infoText;
 	public Text debugText;
 	public Text startServerButtonText;
+	public Image indicator;
 
 	// Use this for initialization
 	void Start ()
@@ -35,7 +36,9 @@ public class Server : MonoBehaviour
 				"\nConnections: " + Network.connections.Length +
 				"\nMy IP: " + Network.player.ipAddress;
 				
-			debugText.text = "Rotation: " + cameraRotation;	
+			debugText.text = "Rotation: " + cameraRotation +
+							"\n" + cameraRotation.y;
+							
 		}
 		
 		
@@ -96,6 +99,7 @@ public class Server : MonoBehaviour
 		{	// start server if not on
 			if (InitializeServer())
 				startServerButtonText.text = "Disconnect";
+			indicator.transform.Translate(0,150,0);
 		} 
 		else if (Network.peerType == NetworkPeerType.Server) 
 		{	// stop server if on
