@@ -11,7 +11,7 @@ public class ClientNetwork : MonoBehaviour {
 	private GUIStyle myStyle;
 	
 	void Start(){
-		InstantiateBomb (0, 0);
+
 	}
 	
 	void OnGUI()
@@ -49,6 +49,8 @@ public class ClientNetwork : MonoBehaviour {
 
 
 
+
+
 	//================================================================================
 	//To server functions
 	public void SendCameraData (Quaternion rotation) {
@@ -77,6 +79,19 @@ public class ClientNetwork : MonoBehaviour {
 
 
 	ArrayList bombList = new ArrayList(20);
+
+	struct BombObject{
+		public int id;
+		public int type;
+		public float radians;
+		public GameObject obj;
+	}
+
+
+
+
+
+
 	/* Adds a bomb to the play field
 	 * @param id Should be unique
 	 * @param type 0 for square, 1 for circle, 2 for tetrahedron
@@ -84,15 +99,29 @@ public class ClientNetwork : MonoBehaviour {
 	 */
 	[RPC]
 	void AddBomb(int id, int type, float degreesLoc){
-		InstantiateBomb (degreesLoc, type);
-	}
 
-	//instantiates bomb in a radius around camera
-	private void InstantiateBomb(float degrees, int type){
-
-		float radians = degrees * (Mathf.PI / 180);
+		float radians = degreesLoc * (Mathf.PI / 180);
 		Vector3 position = new Vector3 (Mathf.Cos (radians), BOMB_HEIGHT, Mathf.Sin (radians)) * RADIUS;		//a unit vector times radius
-		bombList.Add(Instantiate (cubeBombPrefab, position, Quaternion.identity));
+		
+		BombObject newBomb = new BombObject();
+		newBomb.id = id;
+		newBomb.type = type;
+		newBomb.radians = radians;
+		newBomb.obj = (GameObject) Instantiate (cubeBombPrefab, position, Quaternion.identity);
+		bombList.Add(newBomb.obj);
+	}
+	
+
+	[RPC]
+	void RemoveBomb(int id){
+
+		for (int i =0; i < bombList.Count; i++) {
+			BombObject cursor = (BombObject) bombList[i];
+
+			if (cursor.id == id){
+				Destroy(cursor.obj);
+			}
+		}
 	}
 
 }
