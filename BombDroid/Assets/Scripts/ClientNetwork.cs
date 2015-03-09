@@ -11,7 +11,7 @@ public class ClientNetwork : MonoBehaviour {
 	private GUIStyle myStyle;
 	
 	void Start(){
-		
+		InstantiateBomb (0, 0);
 	}
 	
 	void OnGUI()
@@ -65,5 +65,34 @@ public class ClientNetwork : MonoBehaviour {
 	//===============================================================================
 	//From server functions
 
+	private const float RADIUS = 2.0f;
+	private const float X_OFFSET = 0.0f;
+	private const float Z_OFFSET = 0.0f;
+
+	private const float BOMB_HEIGHT = 1.0f;
+
+	public GameObject cubeBombPrefab;
+	public GameObject sphereBombPrefab;
+	public GameObject tetraBombPrefab;
+
+
+	ArrayList bombList = new ArrayList(20);
+	/* Adds a bomb to the play field
+	 * @param id Should be unique
+	 * @param type 0 for square, 1 for circle, 2 for tetrahedron
+	 * @param degreesLoc a value between 0.0 - 360.0f indicating degree location on unit circle
+	 */
+	[RPC]
+	void AddBomb(int id, int type, float degreesLoc){
+		InstantiateBomb (degreesLoc, type);
+	}
+
+	//instantiates bomb in a radius around camera
+	private void InstantiateBomb(float degrees, int type){
+
+		float radians = degrees * (Mathf.PI / 180);
+		Vector3 position = new Vector3 (Mathf.Cos (radians), BOMB_HEIGHT, Mathf.Sin (radians)) * RADIUS;		//a unit vector times radius
+		bombList.Add(Instantiate (cubeBombPrefab, position, Quaternion.identity));
+	}
 
 }
