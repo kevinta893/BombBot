@@ -49,7 +49,7 @@ public class Server : MonoBehaviour
 			direction.Normalize();
 			textPos = textPos + (direction * RADIUS);
 			indicator.transform.position = new Vector3(0,0,0);
-			indicator.transform.Translate(textPos);
+			indicator.transform.Translate(new Vector3(textPos.x, textPos.z, 0));
 
 		}
 		
