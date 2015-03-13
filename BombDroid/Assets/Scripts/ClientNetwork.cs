@@ -6,21 +6,17 @@ public class ClientNetwork : MonoBehaviour
 	
 		public string IP = "192.168.1.67";
 		public int Port = 59981;
-		public GameObject camera;
+		
 		private GUIStyle myStyle;
 	
 		void Start ()
 		{
 
-		/*
+
 				for (int i =0; i < (360/10); i++) {
 					AddBomb (i, i % 2, i * 15+ 12);
 				}
-
-				for (int i =0; i < (360/10); i++) {
-					RemoveBomb (i);
-				}
-				*/
+				
 		}
 	
 		void OnGUI ()

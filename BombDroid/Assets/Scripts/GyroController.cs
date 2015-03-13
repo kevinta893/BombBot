@@ -27,7 +27,7 @@ public class GyroController : MonoBehaviour
 	private bool debug = true;
 	
 	
-	
+	private const float RAYCAST_LOOK_DISTANCE = 100.0f;			//for raycast test of bomb looking
 	#endregion
 	
 	#region [Unity events]
@@ -40,7 +40,7 @@ public class GyroController : MonoBehaviour
 		
 		
 	}
-	
+	private int ddd =0;
 	protected void Update() 
 	{
 		if (!gyroEnabled)
@@ -51,9 +51,48 @@ public class GyroController : MonoBehaviour
 		if (Network.peerType != NetworkPeerType.Disconnected)
 		{
 			server.SendCameraData(transform.rotation);
+
+
+		}
+
+		RaycastBombs ();
+	}
+
+
+	protected void FixedUpdate(){
+
+		float horizontal = Input.GetAxis ("Horizontal");
+		float vertical = Input.GetAxis ("Vertical");
+
+		if (horizontal != 0.0) {
+			camera.transform.RotateAround(camera.transform.position, Vector3.up, 1.0f * horizontal);
+		}
+		if (vertical != 0.0) {
+			camera.transform.RotateAround(camera.transform.position, Vector3.left, 1.0f * vertical);
+		}
+
+	}
+
+	private void RaycastBombs(){
+
+		RaycastHit objLooked;
+		
+		bool lookBomb =  Physics.Raycast(new Ray(camera.transform.position, GetForwardVector(camera.transform.rotation)), out objLooked, RAYCAST_LOOK_DISTANCE);
+		if (lookBomb == true){
+			//looking at a particular bomb
+			GameObject bombLook = objLooked.transform.gameObject;
+			Debug.Log(bombLook.tag);
 		}
 	}
-	
+
+	//Taken from http://nic-gamedev.blogspot.ca/2011/11/quaternion-math-getting-local-axis.html?m=1
+	Vector3 GetForwardVector(Quaternion q) 
+	{
+		return new Vector3( 2 * (q.x * q.z + q.w * q.y), 
+		                   2 * (q.y * q.x - q.w * q.x),
+		                   1 - 2 * (q.x * q.x + q.y * q.y));
+	}
+
 	protected void OnGUI()
 	{
 		GUIStyle androidStyle = new GUIStyle ();
