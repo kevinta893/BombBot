@@ -43,6 +43,8 @@ public class GyroController : MonoBehaviour
 	private int ddd =0;
 	protected void Update() 
 	{
+		RaycastBombs ();
+
 		if (!gyroEnabled)
 			return;
 		transform.rotation = Quaternion.Slerp(transform.rotation,
@@ -55,7 +57,6 @@ public class GyroController : MonoBehaviour
 
 		}
 
-		RaycastBombs ();
 	}
 
 
@@ -78,10 +79,10 @@ public class GyroController : MonoBehaviour
 		RaycastHit objLooked;
 		
 		bool lookBomb =  Physics.Raycast(new Ray(camera.transform.position, GetForwardVector(camera.transform.rotation)), out objLooked, RAYCAST_LOOK_DISTANCE);
-		if (lookBomb == true){
+		if (lookBomb == true) {
 			//looking at a particular bomb
 			GameObject bombLook = objLooked.transform.gameObject;
-			Debug.Log(bombLook.tag);
+			Debug.Log (bombLook.tag);
 		}
 	}
 
