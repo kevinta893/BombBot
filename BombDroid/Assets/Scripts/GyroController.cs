@@ -100,6 +100,9 @@ public class GyroController : MonoBehaviour
 		               2 * (q.x * q.y + q.w * q.z),
 		               2 * (q.x * q.z - q.w * q.y));
 	}
+
+
+
 	protected void OnGUI()
 	{
 		GUIStyle androidStyle = new GUIStyle ();
