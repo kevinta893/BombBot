@@ -69,7 +69,8 @@ public class GyroController : MonoBehaviour
 			camera.transform.RotateAround(camera.transform.position, Vector3.up, 1.0f * horizontal);
 		}
 		if (vertical != 0.0) {
-			camera.transform.RotateAround(camera.transform.position, Vector3.left, 1.0f * vertical);
+			Vector3 left = GetRightVector(camera.transform.rotation) * -1.0f;
+			camera.transform.RotateAround(camera.transform.position, left, 1.0f * vertical);
 		}
 
 	}
@@ -93,7 +94,12 @@ public class GyroController : MonoBehaviour
 		                   2 * (q.y * q.x - q.w * q.x),
 		                   1 - 2 * (q.x * q.x + q.y * q.y));
 	}
-
+	Vector3 GetRightVector(Quaternion q)
+	{
+		return new Vector3( 1 - 2 * (q.y * q.y + q.z * q.z),
+		               2 * (q.x * q.y + q.w * q.z),
+		               2 * (q.x * q.z - q.w * q.y));
+	}
 	protected void OnGUI()
 	{
 		GUIStyle androidStyle = new GUIStyle ();
