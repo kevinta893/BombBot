@@ -31,11 +31,16 @@ public class BombTouch : MonoBehaviour {
 		}
 		
 	}
-	
+
+	/*
+	 * Defuses the touched bomb
+	 * @param target, info about the target touched
+	 */
 	private void Defuse(RaycastHit target)
 	{
-		// only defuse cube bombs
-		if (target.collider.gameObject.CompareTag("Cube_Bomb"))
+		// only defuse bombs
+		if (target.collider.gameObject.CompareTag("Cube_Bomb") || 
+		    	target.collider.gameObject.CompareTag("Sphere_Bomb"))
 		    Destroy(target.collider.gameObject);
 	}
 	

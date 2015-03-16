@@ -1,5 +1,6 @@
 ﻿// ***********************************************************
-// Written by Heyworks Unity Studio http://unity.heyworks.com/
+// Modified from original written by 
+// Heyworks Unity Studio http://unity.heyworks.com/
 // ***********************************************************
 using UnityEngine;
 
@@ -37,26 +38,26 @@ public class GyroController : MonoBehaviour
 	protected void Start () 
 	{
 		AttachGyro();
-		
-		
 	}
+
 	private int ddd =0;
+
 	protected void Update() 
 	{
 		RaycastBombs ();
 
 		if (!gyroEnabled)
 			return;
+
 		transform.rotation = Quaternion.Slerp(transform.rotation,
-		                                      cameraBase * ( ConvertRotation(referanceRotation * Input.gyro.attitude) * Quaternion.identity), lowPassFilterFactor);
+		           			cameraBase * ( ConvertRotation(referanceRotation * Input.gyro.attitude) * Quaternion.identity),
+		                    lowPassFilterFactor);
 
 		if (Network.peerType != NetworkPeerType.Disconnected)
 		{
 			server.SendCameraData(transform.rotation);
 
-
 		}
-
 	}
 
 
