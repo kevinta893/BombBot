@@ -83,7 +83,7 @@ public class GyroController : MonoBehaviour
 		if (lookBomb == true) {
 			//looking at a particular bomb
 			GameObject bombLook = objLooked.transform.gameObject;
-			Debug.Log (bombLook.tag);
+			//Debug.Log (bombLook.tag);
 		}
 	}
 
