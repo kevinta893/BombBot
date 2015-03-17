@@ -16,7 +16,7 @@ public class Server : MonoBehaviour
 	public Text startServerButtonText;
 	public Image indicator;
 
-	private Vector3 CENTER_RADAR; //= new Vector3(-181.4f, -14.6f, 0.0f);
+	private Vector3 CENTER_RADAR; 
 	private const float RADIUS = 100.0f;
 
 
@@ -26,7 +26,7 @@ public class Server : MonoBehaviour
 	{
 		spawn = new Spawner(this);
 		CENTER_RADAR = indicator.transform.position;
-		Debug.Log(CENTER_RADAR);
+		UpdateRadar (Quaternion.identity);
 	}
 	
 	// Update is called once per frame
@@ -43,27 +43,30 @@ public class Server : MonoBehaviour
 				
 			debugText.text = "Rotation: " + cameraRotation +
 							"\nIndicator" + indicator.transform.position;
-						
-			// calculate indicator position based on rotation
-			Vector3 direction = GetForwardVector(cameraRotation);
+					
+			UpdateRadar (cameraRotation);
 
-
-			direction.y = 0;			//ignore vertial displacement
-			direction.Normalize();
-
-
-			//swap z and y components
-			float temp = direction.y;
-			direction.y = direction.z;
-			direction.z = temp;
-
-
-			indicator.transform.position= CENTER_RADAR + (direction*RADIUS);
 		}
 		
 		
 	}
-
+	void UpdateRadar(Quaternion camRot){
+		// calculate indicator position based on rotation
+		Vector3 direction = GetForwardVector(camRot);
+		
+		
+		direction.y = 0;			//ignore vertial displacement
+		direction.Normalize();
+		
+		
+		//swap z and y components
+		float temp = direction.y;
+		direction.y = direction.z;
+		direction.z = temp;
+		
+		
+		indicator.transform.position= CENTER_RADAR + (direction*RADIUS);
+	}
 
 	//Taken from http://nic-gamedev.blogspot.ca/2011/11/quaternion-math-getting-local-axis.html?m=1
 	Vector3 GetForwardVector(Quaternion q) 
