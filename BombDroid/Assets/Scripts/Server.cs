@@ -185,7 +185,14 @@ public class Server : MonoBehaviour
 	// temp method for debug only
 	public void ButtonAddBomb ()
 	{
+		// right now spawn actually creates a random bomb. change later
 		spawn.AddBomb(1, 1, 0, 1);
+	}
+	
+	[RPC]
+	public void GenerateBomb (int id, int type, float degrees)
+	{
+		// blank RPC is weird
 	}
 
 }

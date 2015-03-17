@@ -33,7 +33,7 @@ public class GyroController : MonoBehaviour
 	
 	#region [Unity events]
 
-	public ClientNetwork server;
+	public ClientNetwork client;
 
 	protected void Start () 
 	{
@@ -55,7 +55,7 @@ public class GyroController : MonoBehaviour
 
 		if (Network.peerType != NetworkPeerType.Disconnected)
 		{
-			server.SendCameraData(transform.rotation);
+			client.SendCameraData(transform.rotation);
 
 		}
 	}

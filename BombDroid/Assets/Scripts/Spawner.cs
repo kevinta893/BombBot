@@ -5,18 +5,18 @@ public class Spawner {
 
 	public Server server;
 
-	private int counter;
+	private int id_count;
 
 	public Spawner(Server server) {
 		this.server = server;
-		counter = 1;
+		id_count = 1;
 		// start a timer to spawn bombs
 	}
 
 	public void AddBomb(int id, int type, float degrees, int solution/*, timer*/)
 	{
-		server.SpawnBomb(id, type, degrees);
-		counter++;
+		server.SpawnBomb(id, Random.Range (0, 2), (float) Random.Range(0, 360));
+		id_count++;
 	}
 
 }

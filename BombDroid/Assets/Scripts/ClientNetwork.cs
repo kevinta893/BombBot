@@ -54,15 +54,12 @@ public class ClientNetwork : MonoBehaviour
 	{
 		networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
 	}
-
-	/*	Only need this function if we want to move the client camera from server
-	 * 	I don't think we want that.
 	[RPC]
-	void UpdateCameraFromServer (Quaternion rotation)
+	void UpdateCamera (Quaternion rotation)
 	{
-		camera.transform.rotation = rotation;
+		//blank RPC
 	}
-	*/
+	
 
 
 	//===============================================================================
