@@ -46,13 +46,12 @@ public class GyroController : MonoBehaviour
 	{
 		RaycastBombs ();
 
-		if (!gyroEnabled)
-			return;
-
-		transform.rotation = Quaternion.Slerp(transform.rotation,
-		           			cameraBase * ( ConvertRotation(referanceRotation * Input.gyro.attitude) * Quaternion.identity),
-		                    lowPassFilterFactor);
-
+		if (gyroEnabled)
+		{
+			transform.rotation = Quaternion.Slerp (transform.rotation,
+   			cameraBase * (ConvertRotation (referanceRotation * Input.gyro.attitude) * Quaternion.identity),
+            lowPassFilterFactor);
+		}
 		if (Network.peerType != NetworkPeerType.Disconnected)
 		{
 			client.SendCameraData(transform.rotation);
