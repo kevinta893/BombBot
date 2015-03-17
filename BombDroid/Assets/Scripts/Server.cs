@@ -4,13 +4,11 @@ using System.Collections;
 
 public class Server : MonoBehaviour
 {
-	
-
 	public const int LISTEN_PORT = 59981;
 	private const int MAX_CLIENTS = 2;					//max clients including expert themselves
 	private const bool USE_NAT = false;					//enable nat punchtrough for reachable outside internet
 
-
+	private Spawner spawn;
 	private Quaternion cameraRotation;
 
 	public Text infoText;
@@ -22,16 +20,12 @@ public class Server : MonoBehaviour
 	private const float RADIUS = 10.0f;
 	public Text pointer;
 
-	struct BombObject{
-		public int id;
-		public int type;
-		public float radians;
-		public GameObject obj;
-	}
+
 
 	// Use this for initialization
 	void Start ()
 	{
+		spawn = new Spawner(this);
 		CENTER_RADAR = indicator.transform.position;
 		Debug.Log(CENTER_RADAR);
 	}
@@ -51,6 +45,7 @@ public class Server : MonoBehaviour
 			debugText.text = "Rotation: " + cameraRotation +
 							"\nIndicator" + indicator.transform.position;
 						
+			// calculate indicator position based on rotation
 			Vector3 direction = GetForwardVector(cameraRotation);
 			float temp = direction.y;
 			direction.y = direction.z;
@@ -128,7 +123,6 @@ public class Server : MonoBehaviour
 			if (InitializeServer())
 				startServerButtonText.text = "Disconnect";
 
-			//networkView.RPC("AddBomb", RPCMode.All, 1, 0, 90.0f, null);
 
 		} 
 		else if (Network.peerType == NetworkPeerType.Server) 
@@ -184,6 +178,21 @@ public class Server : MonoBehaviour
 	//====================================================
 	//To Client methods
 
+	public void SpawnBomb(int id, int type, float degrees) {
+		networkView.RPC ("GenerateBomb", RPCMode.All, id, type, degrees);
+	}
 
+	// temp method for debug only
+	public void ButtonAddBomb ()
+	{
+		// right now spawn actually creates a random bomb. change later
+		spawn.AddBomb(1, 1, 0, 1);
+	}
+	
+	[RPC]
+	public void GenerateBomb (int id, int type, float degrees)
+	{
+		// blank RPC is weird
+	}
 
 }

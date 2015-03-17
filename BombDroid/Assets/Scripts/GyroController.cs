@@ -1,5 +1,6 @@
 ﻿// ***********************************************************
-// Written by Heyworks Unity Studio http://unity.heyworks.com/
+// Modified from original written by 
+// Heyworks Unity Studio http://unity.heyworks.com/
 // ***********************************************************
 using UnityEngine;
 
@@ -32,31 +33,31 @@ public class GyroController : MonoBehaviour
 	
 	#region [Unity events]
 
-	public ClientNetwork server;
+	public ClientNetwork client;
 
 	protected void Start () 
 	{
 		AttachGyro();
-		
-		
 	}
+
 	private int ddd =0;
+
 	protected void Update() 
 	{
 		RaycastBombs ();
 
 		if (!gyroEnabled)
 			return;
+
 		transform.rotation = Quaternion.Slerp(transform.rotation,
-		                                      cameraBase * ( ConvertRotation(referanceRotation * Input.gyro.attitude) * Quaternion.identity), lowPassFilterFactor);
+		           			cameraBase * ( ConvertRotation(referanceRotation * Input.gyro.attitude) * Quaternion.identity),
+		                    lowPassFilterFactor);
 
 		if (Network.peerType != NetworkPeerType.Disconnected)
 		{
-			server.SendCameraData(transform.rotation);
-
+			client.SendCameraData(transform.rotation);
 
 		}
-
 	}
 
 
@@ -83,7 +84,7 @@ public class GyroController : MonoBehaviour
 		if (lookBomb == true) {
 			//looking at a particular bomb
 			GameObject bombLook = objLooked.transform.gameObject;
-			Debug.Log (bombLook.tag);
+			//Debug.Log (bombLook.tag);
 		}
 	}
 
