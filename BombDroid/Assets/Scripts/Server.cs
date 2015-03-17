@@ -17,8 +17,7 @@ public class Server : MonoBehaviour
 	public Image indicator;
 
 	private Vector3 CENTER_RADAR; //= new Vector3(-181.4f, -14.6f, 0.0f);
-	private const float RADIUS = 10.0f;
-	public Text pointer;
+	private const float RADIUS = 100.0f;
 
 
 
@@ -47,11 +46,17 @@ public class Server : MonoBehaviour
 						
 			// calculate indicator position based on rotation
 			Vector3 direction = GetForwardVector(cameraRotation);
+
+
+			direction.y = 0;			//ignore vertial displacement
+			direction.Normalize();
+
+
+			//swap z and y components
 			float temp = direction.y;
 			direction.y = direction.z;
 			direction.z = temp;
 
-			direction *= RADIUS;
 
 			indicator.transform.position= CENTER_RADAR + (direction*RADIUS);
 		}
