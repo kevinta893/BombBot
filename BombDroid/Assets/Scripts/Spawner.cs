@@ -1,21 +1,49 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Spawner {
+public class Spawner : MonoBehaviour {
 
 	public Server server;
 
-	private int id_count;
+	private float BOMB_PERIOD = 5.0f;
 
-	public Spawner(Server server) {
-		this.server = server;
+	private int id_count;
+	private float timer;
+
+	void Start()
+	{
 		id_count = 1;
-		// start a timer to spawn bombs
+		timer = BOMB_PERIOD;
 	}
 
-	public void AddBomb(int id, int type, float degrees, int solution/*, timer*/)
+	/*
+	 * 	Generates a new bomb every period
+	 */
+	void Update()
 	{
-		server.SpawnBomb(id, Random.Range (0, 2), (float) Random.Range(0, 360));
+		timer -= Time.deltaTime;
+
+		// on countdown, spawn bomb and reset timer if connected to network
+		if ((Network.peerType != NetworkPeerType.Disconnected) && (timer < 0)) {
+			AddBomb();
+			timer = BOMB_PERIOD;
+		}
+		else if (timer < 0) {	// reset timer anyways even if not connected
+			timer = BOMB_PERIOD;
+		}
+	}
+
+	/*
+	 * 	Add the bomb to server's list of bombs
+	 */
+	public void AddBomb()
+	{
+		server.GenerateBomb(id_count, 
+		                    Random.Range (0, 2), 
+		                    (float) Random.Range(0, 360), 
+		                    Random.Range (0, 3), 
+		                    Random.Range (3, 13));
+
 		id_count++;
 	}
 

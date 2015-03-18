@@ -13,7 +13,7 @@ public class ClientNetwork : MonoBehaviour
 	{
 		// spawn bombs from client to debug
 		/*for (int i =0; i < (360/10); i++) {
-			GenerateBomb (i, i % 2, i * 15+ 12);
+			SpawnBomb (i, i % 2, i * 15+ 12);
 		}*/
 		
 	}
@@ -72,17 +72,17 @@ public class ClientNetwork : MonoBehaviour
 	public GameObject cubeBombPrefab;
 	public GameObject sphereBombPrefab;
 	public GameObject tetraBombPrefab;
-	ArrayList bombList = new ArrayList (20);
+	ArrayList bombList = new ArrayList (Server.MAX_BOMBS);
 		
 
-	/* Generate a bomb to the play field
+	/* Spawn a bomb to the play field
 	 * 
 	 * @param id Should be unique
 	 * @param type 0 for square, 1 for circle, 2 for tetrahedron
 	 * @param degreesLoc a value between 0.0 - 360.0f indicating degree location on unit circle
 	 */
 	[RPC]
-	void GenerateBomb (int id, int type, float degreesLoc)
+	void SpawnBomb (int id, int type, float degreesLoc)
 	{
 		GameObject selection = null;
 		switch (type) {

@@ -7,8 +7,8 @@ public class Server : MonoBehaviour
 	public const int LISTEN_PORT = 59981;
 	private const int MAX_CLIENTS = 2;					//max clients including expert themselves
 	private const bool USE_NAT = false;					//enable nat punchtrough for reachable outside internet
+	public static int MAX_BOMBS = 20;
 
-	private Spawner spawn;
 	private Quaternion cameraRotation;
 
 	public Text infoText;
@@ -19,12 +19,9 @@ public class Server : MonoBehaviour
 	private Vector3 CENTER_RADAR; 
 	private const float RADIUS = 100.0f;
 
-
-
 	// Use this for initialization
 	void Start ()
 	{
-		spawn = new Spawner(this);
 		CENTER_RADAR = indicator.transform.position;
 		UpdateRadar (Quaternion.identity);
 	}
@@ -75,33 +72,6 @@ public class Server : MonoBehaviour
 		            2 * (q.y * q.x - q.w * q.x),
 		            1 - 2 * (q.x * q.x + q.y * q.y));
 	}
-	/*void OnGUI() 
-	{
-		if (Network.peerType == NetworkPeerType.Disconnected) 
-		{
-			if (GUILayout.Button("Start Server", GUILayout.Height(100)))
-			{
-				InitializeServer ();
-			}
-		}
-		else 
-		{
-			if(Network.peerType == NetworkPeerType.Server)
-			{
-				GUILayout.Label("Server");
-				GUILayout.Label("My IP: " + Network.player.ipAddress);
-				GUILayout.Label("Connections: " + Network.connections.Length);
-				GUILayout.Label("Rotation: " + cameraRotation);
-				
-				if(GUILayout.Button("Logout"))
-				{
-					Network.Disconnect(250);
-				}
-			}
-
-
-		}
-	}*/
 
 
 	// TODO: UNUSED? What do we do with this?
@@ -143,7 +113,7 @@ public class Server : MonoBehaviour
 
 
 	//attempt to intialize server, returns true if server started, false otherwise
-	public bool InitializeServer ()
+	public bool InitializeServer()
 	{
 		//make only on no connection
 		if (Network.peerType == NetworkPeerType.Disconnected)
@@ -162,7 +132,7 @@ public class Server : MonoBehaviour
 		return true;
 	}
 
-	public bool StopServer ()
+	public bool StopServer()
 	{
 		if (Network.peerType == NetworkPeerType.Server) {
 			Network.Disconnect (250);
@@ -186,21 +156,38 @@ public class Server : MonoBehaviour
 	//====================================================
 	//To Client methods
 
-	public void SpawnBomb(int id, int type, float degrees) {
-		networkView.RPC ("GenerateBomb", RPCMode.All, id, type, degrees);
+
+	ArrayList bombList = new ArrayList (Server.MAX_BOMBS);
+
+	/*
+	 * 	Generates a bomb entity and update own list
+	 * 	Then spawn the bomb on the client side
+	 */
+	public void GenerateBomb(int id, int type, float degrees, int solution, float timer) 
+	{
+
+		BombEntity bomb = new BombEntity(id, type, degrees, solution, timer);
+		bombList.Add(bomb);
+
+		Debug.Log("Bomb Spawn ID:" + bomb.id + 
+		          " Type:" + bomb.type + 
+		          " Degrees:" + bomb.degrees +
+		          " Solution:" + bomb.solution + 
+		          " Timer:" + bomb.timer);
+		
+		networkView.RPC ("SpawnBomb", RPCMode.All, id, type, degrees);
 	}
+
 
 	// temp method for debug only
 	public void ButtonAddBomb ()
 	{
 		// right now spawn actually creates a random bomb. change later
-		spawn.AddBomb(1, 1, 0, 1);
+		//spawn.AddBomb(1, 1, 0, 1);
 	}
 	
-	[RPC]
-	public void GenerateBomb (int id, int type, float degrees)
-	{
-		// blank RPC is weird
-	}
+	[RPC]	// blank RPC method on client
+	public void SpawnBomb (int id, int type, float degrees) { }
+
 
 }
