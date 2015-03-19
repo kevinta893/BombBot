@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class GameInitalizer : MonoBehaviour {
+public class GameInitializer : MonoBehaviour {
 
 
 	public GameObject gameMenu;						//group of UI objects join and create
@@ -33,8 +33,11 @@ public class GameInitalizer : MonoBehaviour {
 	 *
 	 */
 	public void JoinGame(){
+
 		this.ip = ipText.text;
-		Application.LoadLevel("ClientMode");
+		if (ip.Length > 0) {
+			Application.LoadLevel ("ClientMode");
+		}
 	}
 
 

@@ -24,6 +24,8 @@ public class Server : MonoBehaviour
 	{
 		CENTER_RADAR = indicator.transform.position;
 		UpdateRadar (Quaternion.identity);
+
+		InitializeServer ();
 	}
 	
 	// Update is called once per frame
@@ -73,26 +75,6 @@ public class Server : MonoBehaviour
 		            1 - 2 * (q.x * q.x + q.y * q.y));
 	}
 
-
-	// TODO: UNUSED? What do we do with this?
-	bool ConnectToServer (string ip)
-	{
-		if (Network.peerType == NetworkPeerType.Disconnected)
-		{
-			NetworkConnectionError err = Network.Connect (ip, LISTEN_PORT);
-			//check if error on initalize
-			if (err != NetworkConnectionError.NoError)
-			{
-				Debug.Log (err.ToString ());
-				return false;
-			}
-			return true;
-					
-
-		}
-		return false;
-	}
-
 	public void ToggleServer() 
 	{
 		
@@ -128,8 +110,9 @@ public class Server : MonoBehaviour
 				debugText.text = "Failed to connect.";
 				return false;
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public bool StopServer()

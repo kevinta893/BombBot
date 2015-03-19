@@ -9,13 +9,17 @@ public class ClientNetwork : MonoBehaviour
 	
 	private GUIStyle myStyle;
 
+	private GameInitializer initialParams;
+
+
 	void Start ()
 	{
 		// spawn bombs from client to debug
 		/*for (int i =0; i < (360/10); i++) {
 			SpawnBomb (i, i % 2, i * 15+ 12);
 		}*/
-		
+		initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
+		this.IP = initialParams.GetIP ();
 	}
 
 	void OnGUI ()
