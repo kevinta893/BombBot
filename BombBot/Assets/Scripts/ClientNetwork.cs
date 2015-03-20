@@ -15,11 +15,11 @@ public class ClientNetwork : MonoBehaviour
 	void Start ()
 	{
 		// spawn bombs from client to debug
-		/*for (int i =0; i < (360/10); i++) {
-			SpawnBomb (i, i % 2, i * 15+ 12);
-		}*/
-		initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
-		this.IP = initialParams.GetIP ();
+		for (int i =0; i < (360/10); i++) {
+			//SpawnBomb (i, i%3, i * 15);
+		}
+		//initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
+		//this.IP = initialParams.GetIP ();
 	}
 
 	void OnGUI ()
@@ -97,7 +97,7 @@ public class ClientNetwork : MonoBehaviour
 			selection = sphereBombPrefab;
 			break;
 		case 2:
-			selection = cubeBombPrefab;			//TODO MAKE TRIAGULAR bomb
+			selection = tetraBombPrefab;			
 			break;
 		}
 

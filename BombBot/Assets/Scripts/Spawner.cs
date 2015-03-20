@@ -14,6 +14,7 @@ public class Spawner : MonoBehaviour {
 	{
 		id_count = 1;
 		timer = BOMB_PERIOD;
+		Random.seed = System.DateTime.Now.Millisecond;
 	}
 
 	/*
@@ -39,7 +40,7 @@ public class Spawner : MonoBehaviour {
 	public void AddBomb()
 	{
 		server.GenerateBomb(id_count, 
-		                    Random.Range (0, 2), 
+		                    Random.Range(0,3), 
 		                    (float) Random.Range(0, 360), 
 		                    Random.Range (0, 3), 
 		                    Random.Range (3, 13));

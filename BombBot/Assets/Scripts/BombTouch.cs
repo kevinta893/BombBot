@@ -40,7 +40,7 @@ public class BombTouch : MonoBehaviour {
 	{
 		// only defuse bombs
 		if (target.collider.gameObject.CompareTag("Cube_Bomb") || 
-		    	target.collider.gameObject.CompareTag("Sphere_Bomb"))
+		    	target.collider.gameObject.CompareTag("Sphere_Bomb") || target.collider.gameObject.CompareTag("Tetra_Bomb"))
 		    Destroy(target.collider.gameObject);
 	}
 	
