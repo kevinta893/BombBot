@@ -1,0 +1,8 @@
+- show bomb on expert mode
+- timer countdown for each bomb
+- remove bomb on countdown + update client
+
+- client defusing UI
+- defusing mechanics
+- consequences of defusion (lives/points)
+- increasing difficulty
