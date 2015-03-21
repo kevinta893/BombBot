@@ -21,7 +21,7 @@ public class DefusePanel : MonoBehaviour {
 	public void HideDefusePanel(){
 		Debug.Log ("HIDING");
 		this.transform.position.Set (this.transform.position.x, START_Y - 1000, this.transform.position.z);
-		this.gameObject.SetActive (true);
+		this.gameObject.SetActive (false);
 	}
 
 	public void ShowDefusePanel(){

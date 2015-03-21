@@ -38,6 +38,7 @@ public class GyroController : MonoBehaviour
 	protected void Start () 
 	{
 		AttachGyro();
+
 	}
 
 	private int ddd =0;
@@ -75,7 +76,7 @@ public class GyroController : MonoBehaviour
 
 	}
 
-	public GameObject defusePanel;
+
 
 	private void RaycastBombs(){
 
@@ -85,21 +86,26 @@ public class GyroController : MonoBehaviour
 		if (lookBomb == true) {
 			//looking at a particular bomb
 			GameObject bombLook = objLooked.transform.gameObject;
-			//Debug.Log (bombLook.tag);
+			Debug.Log (bombLook.tag);
 
 			if (bombLook.CompareTag("Cube_Bomb") || bombLook.CompareTag("Sphere_Bomb") || bombLook.CompareTag("Tetra_Bomb")){
-				defusePanel.SetActive (true);
+				SetActiveDefusePanel(true);
 			}
 			else{
 
-				defusePanel.SetActive (false);
+				SetActiveDefusePanel(false);
 			}
 		} else {
-			defusePanel.SetActive (false);
+			SetActiveDefusePanel(false);
 		}
 	}
 
 
+	public GameObject defusePanel;
+
+	private void SetActiveDefusePanel(bool val){
+		defusePanel.SetActive (val);
+	}
 
 
 
@@ -150,6 +156,7 @@ public class GyroController : MonoBehaviour
 				AttachGyro();
 			}
 		}
+
 		/*
 		if (GUILayout.Button("Update gyro calibration (Horizontal only)", GUILayout.Height(80)))
 		{
