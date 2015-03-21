@@ -16,7 +16,7 @@ public class ClientNetwork : MonoBehaviour
 	{
 		// spawn bombs from client to debug
 		for (int i =0; i < (360/10); i++) {
-			//SpawnBomb (i, i%3, i * 15);
+			SpawnBomb (i, i%3, i * 15);
 		}
 		//initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
 		//this.IP = initialParams.GetIP ();
@@ -65,6 +65,9 @@ public class ClientNetwork : MonoBehaviour
 	}
 	
 
+	public void SendBombSolution(int id, int solution){
+		//networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
+	}
 
 	//===============================================================================
 	//From server functions

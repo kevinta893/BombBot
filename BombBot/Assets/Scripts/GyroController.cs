@@ -75,6 +75,8 @@ public class GyroController : MonoBehaviour
 
 	}
 
+	public GameObject defusePanel;
+
 	private void RaycastBombs(){
 
 		RaycastHit objLooked;
@@ -84,8 +86,22 @@ public class GyroController : MonoBehaviour
 			//looking at a particular bomb
 			GameObject bombLook = objLooked.transform.gameObject;
 			//Debug.Log (bombLook.tag);
+
+			if (bombLook.CompareTag("Cube_Bomb") || bombLook.CompareTag("Sphere_Bomb") || bombLook.CompareTag("Tetra_Bomb")){
+				defusePanel.SetActive (true);
+			}
+			else{
+
+				defusePanel.SetActive (false);
+			}
+		} else {
+			defusePanel.SetActive (false);
 		}
 	}
+
+
+
+
 
 	//Taken from http://nic-gamedev.blogspot.ca/2011/11/quaternion-math-getting-local-axis.html?m=1
 	Vector3 GetForwardVector(Quaternion q) 
