@@ -11,22 +11,17 @@ public class GyroController : MonoBehaviour
 {
 	#region [Private fields]
 	
-	private bool gyroEnabled = true;
 	private const float lowPassFilterFactor = 0.2f;
 	
 	private readonly Quaternion baseIdentity =  Quaternion.Euler(90, 0, 0);
-	//private readonly Quaternion landscapeRight =  Quaternion.Euler(0, 0, 90);
-	//private readonly Quaternion landscapeLeft =  Quaternion.Euler(0, 0, -90);
-	//private readonly Quaternion upsideDown =  Quaternion.Euler(0, 0, 180);
-	
 	private Quaternion cameraBase =  Quaternion.identity;
 	private Quaternion calibration =  Quaternion.identity;
 	private Quaternion baseOrientation =  Quaternion.Euler(90, 0, 0);
 	private Quaternion baseOrientationRotationFix =  Quaternion.identity;
-	
 	private Quaternion referanceRotation = Quaternion.identity;
-	private bool debug = true;
 	
+	private bool debug = true;
+	RuntimePlatform platform = Application.platform;
 	
 	private const float RAYCAST_LOOK_DISTANCE = 100.0f;			//for raycast test of bomb looking
 	#endregion
@@ -37,22 +32,25 @@ public class GyroController : MonoBehaviour
 
 	protected void Start () 
 	{
-		AttachGyro();
-
+		if (platform == RuntimePlatform.Android)
+			AttachGyro();
 	}
 
-	private int ddd =0;
+	//private int ddd =0;
 
 	protected void Update() 
 	{
 		RaycastBombs ();
 
-		if (gyroEnabled)
+		// rotate camera with gyro
+		if (platform == RuntimePlatform.Android)
 		{
 			transform.rotation = Quaternion.Slerp (transform.rotation,
    			cameraBase * (ConvertRotation (referanceRotation * Input.gyro.attitude) * Quaternion.identity),
             lowPassFilterFactor);
 		}
+		
+		// send camera data to network
 		if (Network.peerType != NetworkPeerType.Disconnected)
 		{
 			client.SendCameraData(transform.rotation);
@@ -60,20 +58,23 @@ public class GyroController : MonoBehaviour
 		}
 	}
 
-
+	/*
+	* 	Used for keyboard camera control testing
+	*/
 	protected void FixedUpdate(){
 
-		float horizontal = Input.GetAxis ("Horizontal");
-		float vertical = Input.GetAxis ("Vertical");
-
-		if (horizontal != 0.0) {
-			camera.transform.RotateAround(camera.transform.position, Vector3.up, 1.0f * horizontal);
+		if (platform != RuntimePlatform.Android) {
+			float horizontal = Input.GetAxis ("Horizontal");
+			float vertical = Input.GetAxis ("Vertical");
+	
+			if (horizontal != 0.0) {
+				camera.transform.RotateAround(camera.transform.position, Vector3.up, 1.0f * horizontal);
+			}
+			if (vertical != 0.0) {
+				Vector3 left = GetRightVector(camera.transform.rotation) * -1.0f;
+				camera.transform.RotateAround(camera.transform.position, left, 1.0f * vertical);
+			}
 		}
-		if (vertical != 0.0) {
-			Vector3 left = GetRightVector(camera.transform.rotation) * -1.0f;
-			camera.transform.RotateAround(camera.transform.position, left, 1.0f * vertical);
-		}
-
 	}
 
 
@@ -127,57 +128,26 @@ public class GyroController : MonoBehaviour
 
 	protected void OnGUI()
 	{
-		GUIStyle androidStyle = new GUIStyle ();
-		androidStyle.fontSize = 30;
+		GUIStyle customStyle = new GUIStyle ();
+		
+		// set font size accordingly	
+		if (platform == RuntimePlatform.Android) {
+			customStyle.fontSize = 30;
+		}
+		else {
+			customStyle.fontSize = 12;
+		}
 		
 		if (!debug)
 			return;
 		
-		GUILayout.Label("Orientation: " + Screen.orientation, androidStyle);
-		GUILayout.Label("Calibration: " + calibration, androidStyle);
-		GUILayout.Label("Camera base: " + cameraBase, androidStyle);
-		GUILayout.Label("input.gyro.attitude: " + Input.gyro.attitude, androidStyle);
-		GUILayout.Label("transform.rotation: " + transform.rotation, androidStyle);
-		GUILayout.Label ("My IP: " + Network.player.ipAddress, androidStyle);
+		GUILayout.Label("Orientation: " + Screen.orientation, customStyle);
+		GUILayout.Label("Calibration: " + calibration, customStyle);
+		GUILayout.Label("Camera base: " + cameraBase, customStyle);
+		GUILayout.Label("input.gyro.attitude: " + Input.gyro.attitude, customStyle);
+		GUILayout.Label("transform.rotation: " + transform.rotation, customStyle);
+		GUILayout.Label ("My IP: " + Network.player.ipAddress, customStyle);
 		
-		if (GUILayout.Button("On/off gyro: " + Input.gyro.enabled, GUILayout.Height(100)))
-		{
-			Input.gyro.enabled = !Input.gyro.enabled;
-		}
-		
-		if (GUILayout.Button("On/off gyro controller: " + gyroEnabled, GUILayout.Height(100)))
-		{
-			if (gyroEnabled)
-			{
-				DetachGyro();
-			}
-			else
-			{
-				AttachGyro();
-			}
-		}
-
-		/*
-		if (GUILayout.Button("Update gyro calibration (Horizontal only)", GUILayout.Height(80)))
-		{
-			UpdateCalibration(true);
-		}
-
-		if (GUILayout.Button("Update camera base rotation (Horizontal only)", GUILayout.Height(80)))
-		{
-			UpdateCameraBaseRotation(true);
-		}
-
-		if (GUILayout.Button("Reset base orientation", GUILayout.Height(80)))
-		{
-			ResetBaseOrientation();
-		}
-
-		if (GUILayout.Button("Reset camera rotation", GUILayout.Height(80)))
-		{
-			transform.rotation = Quaternion.identity;
-		}
-		*/
 	}
 	
 	#endregion
@@ -189,19 +159,11 @@ public class GyroController : MonoBehaviour
 	/// </summary>
 	private void AttachGyro()
 	{
-		gyroEnabled = true;
+		Input.gyro.enabled = true;
 		ResetBaseOrientation();
 		UpdateCalibration(true);
 		UpdateCameraBaseRotation(true);
 		RecalculateReferenceRotation();
-	}
-	
-	/// <summary>
-	/// Detaches gyro controller from the transform
-	/// </summary>
-	private void DetachGyro()
-	{
-		gyroEnabled = false;
 	}
 	
 	#endregion
