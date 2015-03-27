@@ -17,11 +17,15 @@ public class Server : MonoBehaviour
 	public Image indicator;
 
 	private Vector3 CENTER_RADAR; 
-	private const float RADIUS = 100.0f;
+	private float INDICATOR_RADIUS;
+
+	private RuntimePlatform platform = Application.platform;
 
 	// Use this for initialization
 	void Start ()
 	{
+		INDICATOR_RADIUS = Screen.height * 0.168f;
+
 		CENTER_RADAR = indicator.transform.position;
 		UpdateRadar (Quaternion.identity);
 
@@ -44,27 +48,25 @@ public class Server : MonoBehaviour
 							"\nIndicator" + indicator.transform.position;
 					
 			UpdateRadar (cameraRotation);
-
 		}
-		
-		
 	}
+
+	/*
+	 * Updates direction indicator of BombBot
+	 */
 	void UpdateRadar(Quaternion camRot){
 		// calculate indicator position based on rotation
 		Vector3 direction = GetForwardVector(camRot);
 		
-		
 		direction.y = 0;			//ignore vertial displacement
 		direction.Normalize();
-		
 		
 		//swap z and y components
 		float temp = direction.y;
 		direction.y = direction.z;
 		direction.z = temp;
 		
-		
-		indicator.transform.position= CENTER_RADAR + (direction*RADIUS);
+		indicator.transform.position= CENTER_RADAR + (direction*INDICATOR_RADIUS);
 	}
 
 	//Taken from http://nic-gamedev.blogspot.ca/2011/11/quaternion-math-getting-local-axis.html?m=1
@@ -146,19 +148,22 @@ public class Server : MonoBehaviour
 	 * 	Generates a bomb entity and update own list
 	 * 	Then spawn the bomb on the client side
 	 */
-	public void GenerateBomb(int id, int type, float degrees, int solution, float timer) 
+	public void GenerateBomb(int id, int shape, int colour, float degrees, int solution, float timer) 
 	{
 
-		BombEntity bomb = new BombEntity(id, type, degrees, solution, timer);
+		BombEntity bomb = new BombEntity(id, shape, colour, degrees, solution, timer);
 		bombList.Add(bomb);
 
 		Debug.Log("Bomb Spawn ID:" + bomb.id + 
-		          " Type:" + bomb.type + 
+		          " Shape:" + bomb.shape + 
+		          " Colour:" + bomb.colour +
 		          " Degrees:" + bomb.degrees +
 		          " Solution:" + bomb.solution + 
 		          " Timer:" + bomb.timer);
-		
-		networkView.RPC ("SpawnBomb", RPCMode.All, id, type, degrees);
+
+		// draw bomb on overview
+
+		networkView.RPC ("SpawnBomb", RPCMode.All, id, shape, colour, degrees);
 	}
 
 
@@ -170,7 +175,7 @@ public class Server : MonoBehaviour
 	}
 	
 	[RPC]	// blank RPC method on client
-	public void SpawnBomb (int id, int type, float degrees) { }
+	public void SpawnBomb (int id, int shape, int colour, float degrees) { }
 
 
 }

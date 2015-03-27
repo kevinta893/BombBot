@@ -85,14 +85,17 @@ public class ClientNetwork : MonoBehaviour
 	/* Spawn a bomb to the play field
 	 * 
 	 * @param id Should be unique
-	 * @param type 0 for square, 1 for circle, 2 for tetrahedron
+	 * @param shape 0 for square, 1 for circle, 2 for tetrahedron
+	 * @param colour 0 for red, 1 for blue, 2 for green
 	 * @param degreesLoc a value between 0.0 - 360.0f indicating degree location on unit circle
 	 */
 	[RPC]
-	void SpawnBomb (int id, int type, float degreesLoc)
+	void SpawnBomb (int id, int shape, int colour, float degreesLoc)
 	{
 		GameObject selection = null;
-		switch (type) {
+		Color bombColour = Color.clear;
+
+		switch (shape) {
 		case 0:
 			selection = cubeBombPrefab;
 			break;
@@ -104,11 +107,26 @@ public class ClientNetwork : MonoBehaviour
 			break;
 		}
 
+		switch (colour) {
+		case 0:
+			bombColour = Color.red;
+			break;
+		case 1:
+			bombColour = Color.blue;
+			break;
+		case 2:
+			bombColour = Color.green;
+			break;
+		}
+
 		float radians = degreesLoc * (Mathf.PI / 180);
 		Vector3 position = new Vector3 (Mathf.Cos (radians), BOMB_HEIGHT, Mathf.Sin (radians)) * RADIUS;		//a unit vector times radius
 
+		// generate bomb with proper shape and colour
 		GameObject obj = (GameObject) Instantiate (selection, position, Quaternion.identity);
-		BombObject bomb = new BombObject(id, type, degreesLoc, obj);
+		obj.renderer.material.color = bombColour;
+
+		BombObject bomb = new BombObject(id, degreesLoc, obj);
 		bombList.Add(bomb);
 	}
 

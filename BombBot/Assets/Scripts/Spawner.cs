@@ -35,13 +35,15 @@ public class Spawner : MonoBehaviour {
 	}
 
 	/*
-	 * 	Add the bomb to server's list of bombs
+	 * 	Add a bomb to server's list of bombs
 	 */
 	public void AddBomb()
-	{
+	{	
+		// params: int id, int shape, int colour, float degrees, int solution, float timer
 		server.GenerateBomb(id_count, 
-		                    Random.Range(0,3), 
-		                    (float) Random.Range(0, 360), 
+		                    Random.Range(0,3),
+		                    Random.Range(0,3),
+		                    (float) Random.Range(0, 360),   // KEVIN TO DO: make it so these dont overlap
 		                    Random.Range (0, 3), 
 		                    Random.Range (3, 13));
 
