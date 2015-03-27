@@ -19,7 +19,7 @@ public class Server : MonoBehaviour
 	private Vector3 CENTER_RADAR; 
 	private float INDICATOR_RADIUS;
 
-	private RuntimePlatform platform = Application.platform;
+	//private RuntimePlatform platform = Application.platform;
 
 	// Use this for initialization
 	void Start ()
@@ -49,6 +49,10 @@ public class Server : MonoBehaviour
 					
 			UpdateRadar (cameraRotation);
 		}
+
+		// quit current mode
+		if (Input.GetKeyDown(KeyCode.Escape)) 
+			Application.LoadLevel("MainMenu");
 	}
 
 	/*

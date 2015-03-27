@@ -3,9 +3,8 @@ using System.Collections;
 
 public class ClientNetwork : MonoBehaviour
 {
-	
 	public string IP = "192.168.1.67";
-	public int Port = 59981;
+	public int port = 59981;
 	
 	private GUIStyle myStyle;
 
@@ -18,17 +17,24 @@ public class ClientNetwork : MonoBehaviour
 		/*for (int i =0; i < (360/10); i++) {
 			SpawnBomb (i, i%3, i * 15);
 		}*/
-		//initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
-		//this.IP = initialParams.GetIP ();
+		initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
+		this.IP = initialParams.GetIP ();
 	}
 
-	void OnGUI ()
+	void Update()
+	{
+		// quit current mode
+		if (Input.GetKeyDown(KeyCode.Escape)) 
+			Application.LoadLevel("MainMenu");
+	}
+
+	/*void OnGUI ()
 	{
 		myStyle = new GUIStyle (GUI.skin.textArea);
 		myStyle.fontSize = 40;
 
-		// TODO: move this server connect to another scene or panel?
 		if (Network.peerType == NetworkPeerType.Disconnected) {
+
 			if (IP.Equals ("") == true) {
 				IP = GUI.TextArea (new Rect (1000, 75, 300, 100), "192.168.1.67", myStyle);
 			} else {
@@ -38,6 +44,7 @@ public class ClientNetwork : MonoBehaviour
 			if (GUI.Button (new Rect (1000, 200, 300, 100), "Connect to Expert", myStyle)) {
 				Network.Connect (IP, Port);
 			}
+			//Network.Connect (IP, port);
 		} 
 		else {
 			if (Network.peerType == NetworkPeerType.Client) {
@@ -46,7 +53,7 @@ public class ClientNetwork : MonoBehaviour
 				}
 			}
 		}
-	}
+	}*/
 
 
 

@@ -8,8 +8,10 @@ public class GameInitializer : MonoBehaviour {
 	public GameObject gameMenu;						//group of UI objects join and create
 	public GameObject joinGameMenu;					//group of UI objects for IP and Connect
 	public Text ipText;
+	public Text infoText;
 
 	private string ip;
+	private int port = 59981;
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +20,9 @@ public class GameInitializer : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		// quit current mode
+		//if (Input.GetKeyDown(KeyCode.Escape)) 
+			//Application.Quit();
 
 	}
 
@@ -36,7 +41,15 @@ public class GameInitializer : MonoBehaviour {
 
 		this.ip = ipText.text;
 		if (ip.Length > 0) {
-			Application.LoadLevel ("ClientMode");
+			if (Network.peerType == NetworkPeerType.Disconnected) {
+				Network.Connect (ip, port);
+			}
+			if (Network.peerType != NetworkPeerType.Disconnected) {
+				Application.LoadLevel ("ClientMode");
+			}
+			else {
+				infoText.text = "Failed to connect!";
+			}
 		}
 	}
 
@@ -52,6 +65,11 @@ public class GameInitializer : MonoBehaviour {
 	public void ShowGameMenu(){
 		gameMenu.SetActive (true);
 		joinGameMenu.SetActive (false);
+		infoText.text = "";
+	}
+
+	public void QuitGame() {
+		Application.Quit();
 	}
 
 	public string GetIP(){
