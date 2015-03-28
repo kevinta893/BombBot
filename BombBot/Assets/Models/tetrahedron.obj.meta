@@ -1,18 +1,18 @@
 fileFormatVersion: 2
-guid: 1195ea0d8b503b2479d84d9a5bd56b79
+guid: 0d0322e3054d47a4b99beb9ecdf3d126
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: pPyramid1
+    100000: default
     100002: //RootNode
-    400000: pPyramid1
+    400000: default
     400002: //RootNode
-    2300000: pPyramid1
-    3300000: pPyramid1
-    4300000: pPyramid1
+    2300000: default
+    3300000: default
+    4300000: default
     9500000: //RootNode
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:

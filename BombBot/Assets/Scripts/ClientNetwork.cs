@@ -14,11 +14,11 @@ public class ClientNetwork : MonoBehaviour
 	void Start ()
 	{
 		// spawn bombs from client to debug
-		/*for (int i =0; i < (360/10); i++) {
-			SpawnBomb (i, i%3, i * 15);
-		}*/
-		initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
-		this.IP = initialParams.GetIP ();
+		for (int i =0; i < 65; i++) {
+			SpawnBomb (i, i%3,2, i * 15);
+		}
+		//initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
+		//this.IP = initialParams.GetIP ();
 	}
 
 	void Update()
