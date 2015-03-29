@@ -10,11 +10,22 @@ public class Spawner : MonoBehaviour {
 	private int id_count;
 	private float timer;
 
+	private bool paused = true;
+
 	void Start()
 	{
 		id_count = 1;
 		timer = BOMB_PERIOD;
 		Random.seed = System.DateTime.Now.Millisecond;
+		ChangeSpawnPositions();
+	}
+
+	void PauseSpawner(){
+		paused = true;
+	}
+
+	void StartSpawner(){
+		paused = false;
 	}
 
 	/*
@@ -22,6 +33,12 @@ public class Spawner : MonoBehaviour {
 	 */
 	void Update()
 	{
+
+		if (paused == true) {
+			return;
+		}
+
+
 		timer -= Time.deltaTime;
 
 		// on countdown, spawn bomb and reset timer if connected to network
@@ -49,5 +66,7 @@ public class Spawner : MonoBehaviour {
 
 		id_count++;
 	}
+
+
 
 }
