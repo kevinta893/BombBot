@@ -29,6 +29,8 @@ public class Server : MonoBehaviour
 		CENTER_RADAR = indicator.transform.position;
 		UpdateRadar (Quaternion.identity);
 
+		Random.seed = System.DateTime.Now.Millisecond;				//set random seed
+
 		InitializeServer ();
 	}
 	
@@ -48,6 +50,8 @@ public class Server : MonoBehaviour
 							"\nIndicator" + indicator.transform.position;
 					
 			UpdateRadar (cameraRotation);
+
+			bombManager.UpdateTimers();
 		}
 
 		// quit current mode
@@ -146,17 +150,16 @@ public class Server : MonoBehaviour
 	//To Client methods
 
 
-	ArrayList bombList = new ArrayList (Server.MAX_BOMBS);
+	private BombManager bombManager = new BombManager ();
 
 	/*
 	 * 	Generates a bomb entity and update own list
 	 * 	Then spawn the bomb on the client side
 	 */
-	public void GenerateBomb(int id, int shape, int colour, float degrees, int solution, float timer) 
+	public void GenerateBomb(int shape, int colour, int solution, float timer) 
 	{
+		BombEntity bomb = bombManager.GenerateBomb (shape, colour, solution, timer);
 
-		BombEntity bomb = new BombEntity(id, shape, colour, degrees, solution, timer);
-		bombList.Add(bomb);
 
 		Debug.Log("Bomb Spawn ID:" + bomb.id + 
 		          " Shape:" + bomb.shape + 
@@ -166,9 +169,13 @@ public class Server : MonoBehaviour
 		          " Timer:" + bomb.timer);
 
 		// draw bomb on overview
-
-		networkView.RPC ("SpawnBomb", RPCMode.All, id, shape, colour, degrees);
+		if (bomb.position == -1) {
+			Debug.LogError ("Error, too many bombs on scene, position returned: " + bomb.position);
+		}
+		networkView.RPC ("SpawnBomb", RPCMode.All, bomb.id, bomb.shape, bomb.colour, bomb.degrees);
+		
 	}
+
 
 
 	// temp method for debug only

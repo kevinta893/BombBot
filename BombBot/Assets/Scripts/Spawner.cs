@@ -5,19 +5,18 @@ public class Spawner : MonoBehaviour {
 
 	public Server server;
 
-	private float BOMB_PERIOD = 5.0f;
+	private float BOMB_PERIOD = 0.0f;
 
-	private int id_count;
 	private float timer;
 
 	private bool paused = true;
 
 	void Start()
 	{
-		id_count = 1;
+	
 		timer = BOMB_PERIOD;
 		Random.seed = System.DateTime.Now.Millisecond;
-		ChangeSpawnPositions();
+		StartSpawner ();
 	}
 
 	void PauseSpawner(){
@@ -56,17 +55,13 @@ public class Spawner : MonoBehaviour {
 	 */
 	public void AddBomb()
 	{	
-		// params: int id, int shape, int colour, float degrees, int solution, float timer
-		server.GenerateBomb(id_count, 
+		// params: int shape, int colour, int solution, float timer
+		server.GenerateBomb(Random.Range(0,3),
 		                    Random.Range(0,3),
-		                    Random.Range(0,3),
-		                    (float) Random.Range(0, 360),   // KEVIN TO DO: make it so these dont overlap
 		                    Random.Range (0, 3), 
 		                    Random.Range (3, 13));
 
-		id_count++;
+
 	}
-
-
 
 }
