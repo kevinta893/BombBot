@@ -5,7 +5,7 @@ public class Spawner : MonoBehaviour {
 
 	public Server server;
 
-	private float BOMB_PERIOD = 0.0f;
+	private float BOMB_PERIOD = 5.0f;
 
 	private float timer;
 
@@ -16,7 +16,7 @@ public class Spawner : MonoBehaviour {
 	
 		timer = BOMB_PERIOD;
 		Random.seed = System.DateTime.Now.Millisecond;
-		StartSpawner ();
+		//StartSpawner ();
 	}
 
 	void PauseSpawner(){
