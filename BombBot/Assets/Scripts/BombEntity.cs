@@ -8,19 +8,20 @@ public class BombEntity {
 	public int colour { get; set; }	// 0 for red, 1 for blue, 2 for green
 	public int position { get; set; }
 	public float degrees { get; set; }			//for tracking non-overlapping positions
-	public int solution { get; set; }
-	public float timer { get; set; }		
+	public float timer { get; set; }
+	public GameObject overview { get; set; }
 	
 	/*
 	 * Create a new BombObject
 	 */
-	public BombEntity(int id, int shape, int colour, int position, float degrees, int solution, float timer) {
+	public BombEntity(int id, int shape, int colour, int position, float degrees, float timer, GameObject overview) 
+	{
 		this.id = id;
 		this.shape = shape;
 		this.colour = colour;
 		this.position = position;
 		this.degrees = degrees;
-		this.solution = solution;
 		this.timer = timer;
+		this.overview = overview;
 	}
 }

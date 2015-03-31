@@ -9,13 +9,12 @@ public class Server : MonoBehaviour
 	private const bool USE_NAT = false;					//enable nat punchtrough for reachable outside internet
 	public static int MAX_BOMBS = 20;
 
-	private Quaternion cameraRotation;
-
 	public Text infoText;
 	public Text debugText;
-	public Text startServerButtonText;
 	public Image indicator;
+	public BombManager bm;
 
+	private Quaternion cameraRotation;
 	private Vector3 CENTER_RADAR; 
 	private float INDICATOR_RADIUS;
 
@@ -50,8 +49,6 @@ public class Server : MonoBehaviour
 							"\nIndicator" + indicator.transform.position;
 					
 			UpdateRadar (cameraRotation);
-
-			bombManager.UpdateTimers();
 		}
 
 		// quit current mode
@@ -62,7 +59,8 @@ public class Server : MonoBehaviour
 	/*
 	 * Updates direction indicator of BombBot
 	 */
-	void UpdateRadar(Quaternion camRot){
+	void UpdateRadar(Quaternion camRot)
+	{
 		// calculate indicator position based on rotation
 		Vector3 direction = GetForwardVector(camRot);
 		
@@ -85,25 +83,6 @@ public class Server : MonoBehaviour
 		            1 - 2 * (q.x * q.x + q.y * q.y));
 	}
 
-	public void ToggleServer() 
-	{
-		
-		if (Network.peerType == NetworkPeerType.Disconnected) 
-		{	// start server if not on
-			if (InitializeServer())
-				startServerButtonText.text = "Disconnect";
-
-
-		} 
-		else if (Network.peerType == NetworkPeerType.Server) 
-		{	// stop server if on
-			if (StopServer())
-				startServerButtonText.text = "Start Server";
-		}
-
-	}
-
-
 	//attempt to intialize server, returns true if server started, false otherwise
 	public bool InitializeServer()
 	{
@@ -125,20 +104,13 @@ public class Server : MonoBehaviour
 		return false;
 	}
 
-	public bool StopServer()
-	{
-		if (Network.peerType == NetworkPeerType.Server) {
-			Network.Disconnect (250);
-			return true;
-		}
-		return false;
-	}
-
-
 
 	//====================================================
 	//From client methods
 
+	/*
+	* 	Receive the BombBot's rotation direction live.
+	*/
 	[RPC]
 	void UpdateCamera(Quaternion rotation)
 	{
@@ -150,22 +122,16 @@ public class Server : MonoBehaviour
 	//To Client methods
 
 
-	private BombManager bombManager = new BombManager ();
-
 	/*
-	 * 	Generates a bomb entity and update own list
-	 * 	Then spawn the bomb on the client side
+	 * 	Bomb manager has generated a bomb,
+	 * 	spawn the bomb on the client side
 	 */
-	public void GenerateBomb(int shape, int colour, int solution, float timer) 
+	public void GenerateBomb(BombEntity bomb) 
 	{
-		BombEntity bomb = bombManager.GenerateBomb (shape, colour, solution, timer);
-
-
 		Debug.Log("Bomb Spawn ID:" + bomb.id + 
 		          " Shape:" + bomb.shape + 
 		          " Colour:" + bomb.colour +
 		          " Degrees:" + bomb.degrees +
-		          " Solution:" + bomb.solution + 
 		          " Timer:" + bomb.timer);
 
 		// draw bomb on overview
@@ -175,18 +141,30 @@ public class Server : MonoBehaviour
 		networkView.RPC ("SpawnBomb", RPCMode.All, bomb.id, bomb.shape, bomb.colour, bomb.degrees);
 		
 	}
-
-
-
-	// temp method for debug only
-	public void ButtonAddBomb ()
-	{
-		// right now spawn actually creates a random bomb. change later
-		//spawn.AddBomb(1, 1, 0, 1);
-	}
-	
 	[RPC]	// blank RPC method on client
 	public void SpawnBomb (int id, int shape, int colour, float degrees) { }
 
-
+	
+	/*
+	*	Bomb explodes from timer expiry
+	*/
+	public void DetonateBomb(int id)
+	{
+		Debug.Log ("Detonating bomb " + id);
+		networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
+	}
+	
+	[RPC]	// blank RPC method on client
+	public void DestroyBomb (int id, bool safety) { }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

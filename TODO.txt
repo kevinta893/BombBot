@@ -1,8 +1,12 @@
-- show bomb on expert mode
-- timer countdown for each bomb
-- remove bomb on countdown + update client
-
+- add explosion effects on both expert and client http://images.clipartpanda.com/aging-clipart-explosion-hi.png
 - client defusing UI
 - defusing mechanics
 - consequences of defusion (lives/points)
 - increasing difficulty
+
+
+DONE
+----
+- show bomb on expert mode
+- timer countdown for each bomb
+- remove bomb on countdown + update client
