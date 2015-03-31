@@ -28,37 +28,6 @@ public class ClientNetwork : MonoBehaviour
 			Application.LoadLevel("MainMenu");
 	}
 
-	/*void OnGUI ()
-	{
-		myStyle = new GUIStyle (GUI.skin.textArea);
-		myStyle.fontSize = 40;
-
-		if (Network.peerType == NetworkPeerType.Disconnected) {
-
-			if (IP.Equals ("") == true) {
-				IP = GUI.TextArea (new Rect (1000, 75, 300, 100), "192.168.1.67", myStyle);
-			} else {
-				IP = GUI.TextArea (new Rect (1000, 75, 300, 100), IP, myStyle);
-			}
-
-			if (GUI.Button (new Rect (1000, 200, 300, 100), "Connect to Expert", myStyle)) {
-				Network.Connect (IP, Port);
-			}
-			//Network.Connect (IP, port);
-		} 
-		else {
-			if (Network.peerType == NetworkPeerType.Client) {
-				if (GUI.Button (new Rect (1000, 200, 300, 100), "Logout")) {
-					Network.Disconnect (250);	
-				}
-			}
-		}
-	}*/
-
-
-
-
-
 	//================================================================================
 	//To server functions
 	public void SendCameraData (Quaternion rotation)
@@ -66,10 +35,7 @@ public class ClientNetwork : MonoBehaviour
 		networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
 	}
 	[RPC]
-	void UpdateCamera (Quaternion rotation)
-	{
-		//blank RPC
-	}
+	void UpdateCamera (Quaternion rotation) { }
 	
 
 	public void SendBombSolution(int id, int solution){

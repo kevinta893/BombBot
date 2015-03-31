@@ -14,12 +14,14 @@ public class GameInitializer : MonoBehaviour {
 	private int port = 59981;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		Object.DontDestroyOnLoad (this);
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		// quit current mode
 		//if (Input.GetKeyDown(KeyCode.Escape)) 
 			//Application.Quit();
@@ -30,14 +32,16 @@ public class GameInitializer : MonoBehaviour {
 	/* Starts the player off as the expert. Loads the server
 	 * 
 	 */
-	public void StartServer(){
+	public void StartServer()
+	{
 		Application.LoadLevel("ExpertMode");
 	}
 
 	/* Joins a game
 	 *
 	 */
-	public void JoinGame(){
+	public void JoinGame()
+	{
 
 		this.ip = ipText.text;
 		if (ip.Length > 0) {
@@ -57,22 +61,26 @@ public class GameInitializer : MonoBehaviour {
 	/* Shows the GUI for joining a game
 	 * 
 	 */
-	public void ShowJoinGameGUI(){
+	public void ShowJoinGameGUI()
+	{
 		gameMenu.SetActive (false);
 		joinGameMenu.SetActive (true);
 	}
 
-	public void ShowGameMenu(){
+	public void ShowGameMenu()
+	{
 		gameMenu.SetActive (true);
 		joinGameMenu.SetActive (false);
 		infoText.text = "";
 	}
 
-	public void QuitGame() {
+	public void QuitGame() 
+	{
 		Application.Quit();
 	}
 
-	public string GetIP(){
+	public string GetIP()
+	{
 		return ip;
 	}
 }
