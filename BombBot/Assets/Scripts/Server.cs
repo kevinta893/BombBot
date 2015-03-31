@@ -144,5 +144,27 @@ public class Server : MonoBehaviour
 	[RPC]	// blank RPC method on client
 	public void SpawnBomb (int id, int shape, int colour, float degrees) { }
 
-
+	
+	/*
+	*	Bomb explodes from timer expiry
+	*/
+	public void DetonateBomb(int id)
+	{
+		Debug.Log ("Detonating bomb " + id);
+		networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
+	}
+	
+	[RPC]	// blank RPC method on client
+	public void DestroyBomb (int id, bool safety) { }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
