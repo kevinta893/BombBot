@@ -1,9 +1,13 @@
-- add explosion effects on both expert and client http://images.clipartpanda.com/aging-clipart-explosion-hi.png
-- client defusing UI
-- defusing mechanics
-- consequences of defusion (lives/points)
-- increasing difficulty
+P- client defusing UI
+P- defusing mechanics
+P- consequences of defusion (lives/points)
 
+K- increasing difficulty
+K- game start countdown
+K- double checking math
+K- start report
+
+- add explosion effects on both expert and client http://images.clipartpanda.com/aging-clipart-explosion-hi.png
 
 DONE
 ----

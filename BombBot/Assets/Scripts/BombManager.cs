@@ -22,15 +22,15 @@ public class BombManager : MonoBehaviour {
 	//Random parameters
 	private float BOOM_PERIOD = 1.0f;
 	private float SPAWN_PERIOD = 5.0f;
-	private const int MIN_BOMB_TIMER = 3;
-	private const int MAX_BOMB_TIMER = 13;			//inclusive
+	private const int MIN_BOMB_TIMER = 10;
+	private const int MAX_BOMB_TIMER = 30;			//inclusive
 
 	void Start()
 	{
 		idCount = 1;
 		spawnTimer = 0;
 		boomTimer = 0;
-		OVERVIEW_RADIUS = Screen.height * 0.45f;
+		OVERVIEW_RADIUS = Screen.height * 0.25f;
 		Random.seed = System.DateTime.Now.Millisecond;
 	}
 
@@ -90,7 +90,7 @@ public class BombManager : MonoBehaviour {
 				Destroy(cursor.overview);
 				boomTimer = BOOM_PERIOD;
 			}
-		}
+		} 	
 		
 		// remove the bombs after iterating through them to prevent counter inconsistency
 		for (int i = 0; i < toRemove.Count; i++)
