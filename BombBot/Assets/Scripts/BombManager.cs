@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+*	This class manages the game state and logic of the bombs.
+*/
+
 public class BombManager : MonoBehaviour {
 
 	public Server server;

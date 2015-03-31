@@ -83,22 +83,6 @@ public class Server : MonoBehaviour
 		            1 - 2 * (q.x * q.x + q.y * q.y));
 	}
 
-
-	/* DEFUNCT
-	public void ToggleServer() 
-	{
-		if (Network.peerType == NetworkPeerType.Disconnected) 
-		{	// start server if not on
-			if (InitializeServer())
-				startServerButtonText.text = "Disconnect";
-		} 
-		else if (Network.peerType == NetworkPeerType.Server) 
-		{	// stop server if on
-			if (StopServer())
-				startServerButtonText.text = "Start Server";
-		}
-	}*/
-
 	//attempt to intialize server, returns true if server started, false otherwise
 	public bool InitializeServer()
 	{
@@ -119,17 +103,6 @@ public class Server : MonoBehaviour
 		}
 		return false;
 	}
-	
-	/* DEFUNCT, why do we need to stop the server?
-	public bool StopServer()
-	{
-		if (Network.peerType == NetworkPeerType.Server) {
-			Network.Disconnect (250);
-			return true;
-		}
-		return false;
-	}*/
-
 
 
 	//====================================================
