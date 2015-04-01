@@ -9,7 +9,6 @@ public class Server : MonoBehaviour
 	private const bool USE_NAT = false;					//enable nat punchtrough for reachable outside internet
 	public static int MAX_BOMBS = 20;
 
-	public Text infoText;
 	public Text debugText;
 	public Image indicator;
 	public BombManager bm;
@@ -39,17 +38,16 @@ public class Server : MonoBehaviour
 	void Update ()
 	{
 		if (Network.peerType == NetworkPeerType.Disconnected) {
-			infoText.text = "Server disconnected.";
+			debugText.text = "Server disconnected.";
 		} 
 		else if (Network.peerType == NetworkPeerType.Server) 
 		{
-			infoText.text = "Server connected." +
+			debugText.text = "Server connected." +
 				"\nConnections: " + Network.connections.Length +
-				"\nMy IP: " + Network.player.ipAddress;
-				
-			debugText.text = "Rotation: " + cameraRotation +
-							"\nIndicator" + indicator.transform.position +
-							"\nCurrent: " + bm.currentBomb;
+				"\nMy IP: " + Network.player.ipAddress +
+				"\n Rotation: " + cameraRotation +
+				"\nIndicator" + indicator.transform.position +
+				"\nCurrent: " + bm.currentBomb;
 					
 			UpdateRadar (cameraRotation);
 		}
