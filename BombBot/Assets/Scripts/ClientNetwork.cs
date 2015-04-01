@@ -30,6 +30,10 @@ public class ClientNetwork : MonoBehaviour
 
 	//================================================================================
 	//To server functions
+	
+	/*
+	*	Send the camera state to the server
+	*/
 	public void SendCameraData (Quaternion rotation)
 	{
 		networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
@@ -38,9 +42,29 @@ public class ClientNetwork : MonoBehaviour
 	void UpdateCamera (Quaternion rotation) { }
 	
 
-	public void SendBombSolution(int id, int solution){
-		//networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
+	/*
+	*	Send the id of the bomb that the client is currently looking at to the server
+	*/
+	public void SendCurrentBomb(GameObject bomb) 
+	{
+		int id = -1;	// return -1 if not looking at bomb
+		
+		if (bomb != null) 
+		{
+			// find id of current bomb
+			for (int i = 0; i < bombList.Count; i++) {
+				BombObject tmp = (BombObject) bombList[i];
+				if (tmp.obj == bomb) {
+					id = tmp.id;
+					break;
+				}
+			}
+		}
+		Debug.Log("Sending current bomb id " + id);
+		networkView.RPC ("CurrentBomb", RPCMode.Server, id);
 	}
+	[RPC]
+	void CurrentBomb (int id) { }
 
 	//===============================================================================
 	//From server functions
@@ -116,24 +140,24 @@ public class ClientNetwork : MonoBehaviour
 	void DestroyBomb (int id, bool safe)
 	{
 		BombObject cursor = null;
-		int i;
 
 		// find the bomb iteratively
-		for (i = 0; i < bombList.Count; i++) {
+		for (int i = 0; i < bombList.Count; i++) {
 			cursor = (BombObject) bombList[i];
 
 			if (cursor.id == id) {
+				if (safe) {
+					Debug.Log ("Destroying Bomb #" + i + "safely");
+					Destroy(cursor.obj);
+					bombList.RemoveAt(i);
+				} else {
+					Debug.Log ("Destroying Bomb #" + i + "explodedely");
+					// EXPLODE animation
+					Destroy(cursor.obj);
+					bombList.RemoveAt(i);
+				}
 				break;
 			}
-		}
-
-		if (safe) {
-			Destroy(cursor.obj);
-			bombList.RemoveAt(i);
-		} else {
-			// EXPLODE animation
-			Destroy(cursor.obj);
-			bombList.RemoveAt(i);
 		}
 	}
 
