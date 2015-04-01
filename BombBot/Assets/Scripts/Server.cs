@@ -127,6 +127,24 @@ public class Server : MonoBehaviour
 	{ 
 		bm.currentBomb = id;
 	}
+	
+	/*
+	*	Receive an attempted solution from BombBot
+	*/
+	[RPC]
+	void CheckSolution (int id, int solution) 
+	{ 
+		bool success = bm.VerifySolution(id, solution);
+		
+		if (success) {
+			Debug.Log ("Defused bomb " + id);
+			networkView.RPC ("DestroyBomb", RPCMode.All, id, true);
+		}
+		else {	// bomb go boom!
+			Debug.Log ("Detonating (from expiry) bomb " + id);
+			networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
+		}
+	}
 
 
 	//====================================================
@@ -162,7 +180,7 @@ public class Server : MonoBehaviour
 	*/
 	public void DetonateBomb(int id)
 	{
-		Debug.Log ("Detonating bomb " + id);
+		Debug.Log ("Detonating (from expiry) bomb " + id);
 		networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
 	}
 	

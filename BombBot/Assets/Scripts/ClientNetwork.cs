@@ -65,6 +65,16 @@ public class ClientNetwork : MonoBehaviour
 	}
 	[RPC]
 	void CurrentBomb (int id) { }
+	
+	/*
+	*	Send the server the attempted solution
+	*/
+	public void AttemptDefuse(int id, int solution)
+	{
+		networkView.RPC ("CheckSolution", RPCMode.Server, id, solution);
+	}
+	[RPC]
+	void CheckSolution (int id, int solution) { }
 
 	//===============================================================================
 	//From server functions

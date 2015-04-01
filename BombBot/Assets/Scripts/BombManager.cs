@@ -270,4 +270,18 @@ public class BombManager : MonoBehaviour {
 		
 		return overview;
 	}
+	
+	
+	/**************************************************************************
+	**************************   BOMB DEFUSING   ******************************
+	**************************************************************************/
+	
+	/*
+	*	Check if the given solution is correct
+	*/
+	public bool VerifySolution (int id, int solution)
+	{
+		// TODO
+		return true;
+	}
 }
