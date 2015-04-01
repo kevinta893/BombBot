@@ -11,7 +11,9 @@ public class BombManager : MonoBehaviour {
 	public Server server;
 	public GameObject overviewBomb;
 	public Image circle;
+	public Canvas canvas;
 	public Text boom;		// a poor man's explosion	
+
 
 	private int idCount;
 	private float spawnTimer;
@@ -30,7 +32,7 @@ public class BombManager : MonoBehaviour {
 		idCount = 1;
 		spawnTimer = 0;
 		boomTimer = 0;
-		OVERVIEW_RADIUS = Screen.height * 0.25f;
+		OVERVIEW_RADIUS = canvas.scaleFactor * circle.rectTransform.rect.height* 0.35f;
 		Random.seed = System.DateTime.Now.Millisecond;
 	}
 
@@ -117,7 +119,6 @@ public class BombManager : MonoBehaviour {
 
 	/* Find bomb by id
 	 * Returns null if not found
-	 TODO determine if this is ever used at all
 	 */
 	public BombEntity GetBombEntity(int id)
 	{

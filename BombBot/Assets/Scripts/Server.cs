@@ -13,6 +13,8 @@ public class Server : MonoBehaviour
 	public Text debugText;
 	public Image indicator;
 	public BombManager bm;
+	public Canvas canvas;
+	public Image circle;
 
 	private Quaternion cameraRotation;
 	private Vector3 CENTER_RADAR; 
@@ -23,8 +25,8 @@ public class Server : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		INDICATOR_RADIUS = Screen.height * 0.168f;
-
+		INDICATOR_RADIUS = canvas.scaleFactor * circle.rectTransform.rect.height* 0.25f;
+		Debug.Log (circle.rectTransform.rect.height);
 		CENTER_RADAR = indicator.transform.position;
 		UpdateRadar (Quaternion.identity);
 
@@ -71,8 +73,10 @@ public class Server : MonoBehaviour
 		float temp = direction.y;
 		direction.y = direction.z;
 		direction.z = temp;
-		
-		indicator.transform.position= CENTER_RADAR + (direction*INDICATOR_RADIUS);
+
+		Vector3 pos= CENTER_RADAR + (direction * INDICATOR_RADIUS);
+
+		indicator.rectTransform.position = new Vector2 (pos.x, pos.y);
 	}
 
 	//Taken from http://nic-gamedev.blogspot.ca/2011/11/quaternion-math-getting-local-axis.html?m=1
