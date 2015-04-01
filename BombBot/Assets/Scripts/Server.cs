@@ -48,7 +48,8 @@ public class Server : MonoBehaviour
 				"\nMy IP: " + Network.player.ipAddress;
 				
 			debugText.text = "Rotation: " + cameraRotation +
-							"\nIndicator" + indicator.transform.position;
+							"\nIndicator" + indicator.transform.position +
+							"\nCurrent: " + bm.currentBomb;
 					
 			UpdateRadar (cameraRotation);
 		}
@@ -120,6 +121,34 @@ public class Server : MonoBehaviour
 	{
 		cameraRotation = rotation;
 	}
+	
+	
+	/*
+	*	Receive the current bomb that BombBot is looking at
+	*/
+	[RPC]
+	void CurrentBomb (int id) 
+	{ 
+		bm.currentBomb = id;
+	}
+	
+	/*
+	*	Receive an attempted solution from BombBot
+	*/
+	[RPC]
+	void CheckSolution (int id, int solution) 
+	{ 
+		bool success = bm.VerifySolution(id, solution);
+		
+		if (success) {
+			Debug.Log ("Defused bomb " + id);
+			networkView.RPC ("DestroyBomb", RPCMode.All, id, true);
+		}
+		else {	// bomb go boom!
+			Debug.Log ("Detonating (from expiry) bomb " + id);
+			networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
+		}
+	}
 
 
 	//====================================================
@@ -135,6 +164,7 @@ public class Server : MonoBehaviour
 		Debug.Log("Bomb Spawn ID:" + bomb.id + 
 		          " Shape:" + bomb.shape + 
 		          " Colour:" + bomb.colour +
+		          " Solution:" + bomb.solution +
 		          " Degrees:" + bomb.degrees +
 		          " Timer:" + bomb.timer);
 
@@ -154,7 +184,7 @@ public class Server : MonoBehaviour
 	*/
 	public void DetonateBomb(int id)
 	{
-		Debug.Log ("Detonating bomb " + id);
+		Debug.Log ("Detonating (from expiry) bomb " + id);
 		networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
 	}
 	

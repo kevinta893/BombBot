@@ -89,15 +89,17 @@ public class GyroController : MonoBehaviour
 			GameObject bombLook = objLooked.transform.gameObject;
 			Debug.Log (bombLook.tag);
 
-			if (bombLook.CompareTag("Cube_Bomb") || bombLook.CompareTag("Sphere_Bomb") || bombLook.CompareTag("Tetra_Bomb")){
+			if (bombLook.CompareTag("Cube_Bomb") || bombLook.CompareTag("Sphere_Bomb") || bombLook.CompareTag("Tetra_Bomb")) {
 				SetActiveDefusePanel(true);
+				client.SendCurrentBomb(bombLook);
 			}
-			else{
-
+			else {	// looking at nothing/non-bomb
 				SetActiveDefusePanel(false);
+				client.SendCurrentBomb(null);
 			}
-		} else {
+		} else { // looking at nothing/non-bomb
 			SetActiveDefusePanel(false);
+			client.SendCurrentBomb(null);
 		}
 	}
 

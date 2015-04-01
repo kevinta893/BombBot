@@ -26,6 +26,10 @@ public class BombManager : MonoBehaviour {
 	private float SPAWN_PERIOD = 5.0f;
 	private const int MIN_BOMB_TIMER = 10;
 	private const int MAX_BOMB_TIMER = 30;			//inclusive
+	
+	
+	// defusing
+	public int currentBomb { get; set; }
 
 	void Start()
 	{
@@ -33,6 +37,8 @@ public class BombManager : MonoBehaviour {
 		spawnTimer = 0;
 		boomTimer = 0;
 		OVERVIEW_RADIUS = canvas.scaleFactor * circle.rectTransform.rect.height* 0.35f;
+		currentBomb = -1;
+		
 		Random.seed = System.DateTime.Now.Millisecond;
 	}
 
@@ -140,9 +146,10 @@ public class BombManager : MonoBehaviour {
 	 */
 	private void ConstructBomb()
 	{
-		// params: int shape, int colour, float timer
+		// params: int shape, int colour, int solution, float timer
 		AddBomb(Random.Range (0, 3),
 		        Random.Range (0, 3),
+		        Random.Range (1, 4),
 		        Random.Range (MIN_BOMB_TIMER, MAX_BOMB_TIMER + 1));
 	}
 	
@@ -151,7 +158,7 @@ public class BombManager : MonoBehaviour {
 	 */
 	public void ConstructBomb(int shape, int colour, int solution, float timer)
 	{
-		AddBomb(shape, colour, timer);
+		AddBomb(shape, colour, solution, timer);
 	}
 
 	/*
@@ -185,12 +192,12 @@ public class BombManager : MonoBehaviour {
 	/*
 	*	Add a bomb with the given parameter to the Bomb list
 	*/
-	private void AddBomb(int shape, int colour, float timer)
+	private void AddBomb(int shape, int colour, int solution, float timer)
 	{
 		//get a free location
 		int index = GetRandPosition ();
 
-		BombEntity bomb = new BombEntity(idCount, shape, colour, index, PositionToDegrees(index), timer, null);
+		BombEntity bomb = new BombEntity(idCount, shape, colour, index, solution, PositionToDegrees(index), timer, null);
 		bombList.Add(bomb);
 
 		idCount++;
@@ -264,5 +271,19 @@ public class BombManager : MonoBehaviour {
 		overview.transform.SendMessage("UpdateTimer", timer);
 		
 		return overview;
+	}
+	
+	
+	/**************************************************************************
+	**************************   BOMB DEFUSING   ******************************
+	**************************************************************************/
+	
+	/*
+	*	Check if the given solution is correct
+	*/
+	public bool VerifySolution (int id, int solution)
+	{
+		// TODO
+		return true;
 	}
 }
