@@ -97,6 +97,7 @@ public class BombManager : MonoBehaviour {
 				// remove from overview and show BOOM!
 				Destroy(cursor.overview);
 				boomTimer = BOOM_PERIOD;
+				//audio.Play();					//very loud.
 			}
 		} 	
 		
