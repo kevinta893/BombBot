@@ -16,15 +16,17 @@ public class Countdown : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
-		playTimer ();
+	void Start () 
+	{
+		PlayTimer ();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 	
-		if (done == true) {
+		if (done == true) 
+		{
 			return;
 		}
 
@@ -57,7 +59,8 @@ public class Countdown : MonoBehaviour {
 	}
 
 
-	public void playTimer (){
+	public void PlayTimer ()
+	{
 
 		done = false;
 
@@ -68,7 +71,8 @@ public class Countdown : MonoBehaviour {
 		countdownText.text = count.ToString ();
 	}
 
-	public bool doneCount(){
+	public bool DoneCount()
+	{
 		return done;
 	}
 
