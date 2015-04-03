@@ -47,9 +47,10 @@ public class Server : MonoBehaviour
 				"\nConnections: " + Network.connections.Length +
 				"\nMy IP: " + Network.player.ipAddress +
 				"\n Rotation: " + cameraRotation +
-				"\nIndicator" + indicator.transform.position +
-				"\nCurrent: " + bm.currentBomb;
-					
+				"\nIndicator" + indicator.transform.position;
+				
+			debugText.text += bm.PrintSolution();
+			
 			UpdateRadar (cameraRotation);
 		}
 

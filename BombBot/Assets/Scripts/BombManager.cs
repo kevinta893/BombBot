@@ -184,7 +184,7 @@ public class BombManager : MonoBehaviour {
 	***********************   BOMB CONSTRUCTION   *****************************
 	**************************************************************************/
 
-	private const float DEGREE_OFFSET = 15.0f;			//Degree spacing to ensure that all bombs dont overlap
+	private const float DEGREE_OFFSET = 45.0f;			//Degree spacing to ensure that all bombs dont overlap
 	private float INIT_DEGREE_OFFSET = 0.0f;
 
 	private const int MAX_POSITIONS = (int) (360.0f / DEGREE_OFFSET);
@@ -294,5 +294,18 @@ public class BombManager : MonoBehaviour {
 			return true;
 		else
 			return false;
+	}
+	
+	/*
+	*	DEBUG USE: Print out solution for debug
+	*/
+	public string PrintSolution() 
+	{
+		if (currentBomb == -1)
+			return "\nCurrent: -1";
+		else {
+			BombEntity tmp = GetBombEntity(currentBomb);
+			return 	"\nCurrent: " + currentBomb + " Sol: " + tmp.solution + " " + tmp.colour + "/" + tmp.shape;
+		}
 	}
 }
