@@ -16,6 +16,7 @@ public class GameInitializer : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
+		Network.Disconnect ();
 		Object.DontDestroyOnLoad (this);
 	}
 	

@@ -112,6 +112,11 @@ public class Server : MonoBehaviour
 	}
 
 
+	public void GameOver(){
+		networkView.RPC ("SendGameOver", RPCMode.Others);
+	}
+
+
 	/*
 	 * Player has connected.
 	 */
@@ -204,7 +209,8 @@ public class Server : MonoBehaviour
 	public void DestroyBomb (int id, bool safety) { }
 	
 	
-	
+	[RPC]
+	private void SendGameOver(){}
 	
 	
 	

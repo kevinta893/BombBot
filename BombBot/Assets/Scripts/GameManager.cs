@@ -19,19 +19,21 @@ public class GameManager : MonoBehaviour {
 
 	public Countdown countdown;
 	public WaitingPlayerText waitingText;
-
+	public GameObject gameOverText;
 
 
 	public Server server;
 
-	private int bombsDefused;
-	
+	private int bombsDefused = 0;
+	private int lives = 3;
 	
 	private const float SPAWN_INTERVAL = 5.0f;
 	private float spawnTimer = SPAWN_INTERVAL;
 	
-	private bool paused = false;
-	
+	private bool spawnPause = true;
+	private bool gameover = false;
+
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -43,20 +45,33 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (paused) 
+
+		//run as long as game not over
+		if (gameover == true) 
+		{
+			return;
+		}
+
+		UpdateSpawn ();			//run spawner
+
+	}
+
+	private void UpdateSpawn(){
+
+		//run as long as game not over
+		if (spawnPause == true) 
 		{
 			return;
 		}
 		
 		spawnTimer -= Time.deltaTime;
-
+		
 		if (spawnTimer <= 0.0f) 
 		{
-
+			//spawn thing
 		}
-
 	}
-	
+
 
 	//Player connected. Start Game.
 	void OnPlayerConnected(NetworkPlayer player) {
@@ -65,22 +80,41 @@ public class GameManager : MonoBehaviour {
 
 		countdown.PlayTimer ();
 
+
 	}
 
 
 	/*
 	 * Gain a point, bomb defused.
 	 */
-	public void WinPoint(){
-
+	public void WinPoint()
+	{
+		bombsDefused++;
 	}
 
 
 	/*
 	 * Lose a life
 	 */
-	public void LoseLife(){
+	public void LoseLife()
+	{
+		lives--;
 
+
+		if (lives == 0) {
+			//game over
+			GameOver ();
+		}
+	}
+
+	private void GameOver()
+	{
+		spawnPause = true;
+		gameover = true;
+
+		gameOverText.SetActive (true);
+
+		server.GameOver ();
 	}
 
 
