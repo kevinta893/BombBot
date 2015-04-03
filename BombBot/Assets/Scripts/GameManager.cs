@@ -60,6 +60,22 @@ public class GameManager : MonoBehaviour {
 	}
 
 
+	/*
+	 * Gain a point, bomb defused.
+	 */
+	public void WinPoint(){
+
+	}
+
+
+	/*
+	 * Lose a life
+	 */
+	public void LoseLife(){
+
+	}
+
+
 
 	private int PRECISION = 100000000;			//how many floating point numbers to consider
 	/*
