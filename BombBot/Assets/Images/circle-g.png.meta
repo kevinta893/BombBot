@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: db987a22218b88a4d94e1a106c737177
+guid: 530f040cc85ff1242af8d4960016eaec
 TextureImporter:
   fileIDToRecycleName: {}
   serializedVersion: 2
@@ -41,11 +41,11 @@ TextureImporter:
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings:
-  - buildTarget: Android
+  - buildTarget: Standalone
     maxTextureSize: 1024
     textureFormat: -3
     compressionQuality: 50
-  - buildTarget: Standalone
+  - buildTarget: Android
     maxTextureSize: 1024
     textureFormat: -3
     compressionQuality: 50
