@@ -150,7 +150,7 @@ public class BombManager : MonoBehaviour {
 		// params: int shape, int colour, int solution, float timer
 		AddBomb(Random.Range (0, 3),
 		        Random.Range (0, 3),
-		        Random.Range (1, 4),
+		        Random.Range (1, 6),
 		        Random.Range (MIN_BOMB_TIMER, MAX_BOMB_TIMER + 1));
 	}
 	

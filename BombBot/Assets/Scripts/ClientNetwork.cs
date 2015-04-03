@@ -19,6 +19,7 @@ public class ClientNetwork : MonoBehaviour
 		}*/
 		//initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
 		//this.IP = initialParams.GetIP ();
+		SpawnBomb (1, 1, 1, 0);
 	}
 
 	void Update()

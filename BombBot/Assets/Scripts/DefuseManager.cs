@@ -21,7 +21,7 @@ public class DefuseManager : MonoBehaviour {
 
 	void Start () 
 	{
-	
+		Random.seed = System.DateTime.Now.Millisecond;
 	}
 	
 	/*
@@ -29,7 +29,8 @@ public class DefuseManager : MonoBehaviour {
 	 */
 	void Update () 
 	{
-		if (bm.currentBomb == -1) {
+		if (bm.currentBomb == -1) 
+		{
 			ToggleDefuseBox(false);
 			colourAttempt = -1;
 			shapeAttempt = -1;
@@ -60,6 +61,25 @@ public class DefuseManager : MonoBehaviour {
 			triangle.interactable = false;
 		}
 	}
+	
+	private void CheckSolution ()
+	{
+		BombEntity bomb = bm.GetBombEntity(bm.currentBomb);
+		
+		if (bomb.colour == colourAttempt && bomb.shape == shapeAttempt)
+		{	// output correct solution
+			solution.text = bomb.solution.ToString();
+		}
+		else
+		{	// output incorrect solution
+			int incorrect;
+			do {
+				incorrect = Random.Range (1, 6);
+			} while (incorrect == bomb.solution);
+			
+			solution.text = incorrect.ToString();
+		}
+	}
 
 
 	//**************************************
@@ -73,6 +93,9 @@ public class DefuseManager : MonoBehaviour {
 	public void ColourClicked (int colour) 
 	{
 		colourAttempt = colour;
+		
+		if (shapeAttempt != -1)
+			CheckSolution();
 	}
 
 	/*
@@ -82,5 +105,8 @@ public class DefuseManager : MonoBehaviour {
 	public void ShapeClicked (int shape) 
 	{
 		shapeAttempt = shape;
+		
+		if (colourAttempt != -1)
+			CheckSolution();
 	}
 }
