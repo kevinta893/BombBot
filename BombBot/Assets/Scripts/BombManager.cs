@@ -264,13 +264,18 @@ public class BombManager : MonoBehaviour {
 	{
 		// TODO ADD MATH FOR PROPER POSITIONING!
 		float radians = degrees * (Mathf.PI / 180);
-		Vector3 position = new Vector3 (Mathf.Cos(radians), Mathf.Sin(radians), 0) * OVERVIEW_RADIUS;		//a unit vector times radius
-		
-		GameObject overview = (GameObject) Instantiate(overviewBomb, position, overviewBomb.transform.rotation);
+		Vector3 position = new Vector3 (Mathf.Cos(radians), Mathf.Sin(radians), 0);
+		position.Normalize ();
+		position *= OVERVIEW_RADIUS;		//a unit vector times radius
+
+		//instantiate the new bomb to draw on screen
+		GameObject overview = (GameObject) Instantiate(overviewBomb, Vector3.zero, overviewBomb.transform.rotation);
 		overview.transform.SetParent(circle.transform, false);
 		overview.SetActive(true);
 		overview.transform.SendMessage("UpdateTimer", timer);
-		
+
+		overview.GetComponent<RectTransform> ().position = position + circle.rectTransform.position;
+
 		return overview;
 	}
 	

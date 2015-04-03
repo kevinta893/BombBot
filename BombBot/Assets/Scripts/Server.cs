@@ -15,7 +15,6 @@ public class Server : MonoBehaviour
 	public Canvas canvas;
 	public Image circle;
 
-	public GameManager gm; 
 
 	private Quaternion cameraRotation;
 	private Vector3 CENTER_RADAR; 
@@ -111,8 +110,9 @@ public class Server : MonoBehaviour
 		return false;
 	}
 
+
 	/*
-	 * Player has connected. Begin game
+	 * Player has connected.
 	 */
 	void OnPlayerConnected(NetworkPlayer player) {
 
