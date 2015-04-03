@@ -44,18 +44,34 @@ public class GameInitializer : MonoBehaviour {
 	{
 
 		this.ip = ipText.text;
+
 		if (ip.Length > 0) {
 			if (Network.peerType == NetworkPeerType.Disconnected) {
-				Network.Connect (ip, port);
-			}
-			if (Network.peerType != NetworkPeerType.Disconnected) {
-				Application.LoadLevel ("ClientMode");
-			}
-			else {
-				infoText.text = "Failed to connect!";
+				infoText.text = "Connecting...";
+
+				NetworkConnectionError err = Network.Connect (ip, port);
+
+				//await confirmination by event
 			}
 		}
 	}
+
+
+	//On connection to server
+	void OnConnectedToServer() {
+		Application.LoadLevel ("ClientMode");
+	}
+
+	//Failed connection
+	void OnFailedToConnect(NetworkConnectionError error) {
+		infoText.text = "Could not connect to server: " + error.ToString();
+	}
+
+
+
+
+
+
 
 
 	/* Shows the GUI for joining a game
@@ -73,6 +89,19 @@ public class GameInitializer : MonoBehaviour {
 		joinGameMenu.SetActive (false);
 		infoText.text = "";
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public void QuitGame() 
 	{
