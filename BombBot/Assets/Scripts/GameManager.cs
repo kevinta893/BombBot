@@ -51,27 +51,14 @@ public class GameManager : MonoBehaviour {
 
 		}
 
-
-		if (server.HasPlayer() == true) 
-		{
-			RunOnce();
-		}
 	}
+	
 
-
-	private bool runned = false;
-
-	private void RunOnce(){
-		if (runned == false) {
-			runned = true;
-
-		} else {
-			return;
-		}
-
+	//Player connected. Start Game.
+	void OnPlayerConnected(NetworkPlayer player) {
 		countdown.PlayTimer ();
-
 	}
+
 
 
 	private int PRECISION = 100000000;			//how many floating point numbers to consider

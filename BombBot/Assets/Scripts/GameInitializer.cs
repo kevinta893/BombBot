@@ -49,7 +49,7 @@ public class GameInitializer : MonoBehaviour {
 			if (Network.peerType == NetworkPeerType.Disconnected) {
 				infoText.text = "Connecting...";
 
-				NetworkConnectionError err = Network.Connect (ip, port);
+				Network.Connect (ip, port);
 
 				//await confirmination by event
 			}
