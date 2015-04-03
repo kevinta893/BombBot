@@ -18,6 +18,10 @@ public class GameManager : MonoBehaviour {
 	
 
 	public Countdown countdown;
+	public WaitingPlayerText waitingText;
+
+
+
 	public Server server;
 
 	private int bombsDefused;
@@ -33,7 +37,7 @@ public class GameManager : MonoBehaviour {
 	{
 		spawnTimer = SPAWN_INTERVAL;
 
-
+		waitingText.StartText ();
 	}
 	
 	// Update is called once per frame
@@ -56,7 +60,11 @@ public class GameManager : MonoBehaviour {
 
 	//Player connected. Start Game.
 	void OnPlayerConnected(NetworkPlayer player) {
+
+		waitingText.StopText ();
+
 		countdown.PlayTimer ();
+
 	}
 
 
