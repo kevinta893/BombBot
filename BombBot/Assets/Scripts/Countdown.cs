@@ -52,14 +52,7 @@ public class Countdown : MonoBehaviour {
 
 		done = false;
 
-		SetupTimer ();
-	}
-
-	//sets up timer
-	private void SetupTimer()
-	{
-		count = START_COUNT_NUM;
-		countdownText.gameObject.SetActive(true);
+		count = START_COUNT_NUM + 1;			//1 second delay before starting
 		
 		countdownTimer = COUNTDOWN_INTERVAL;
 		countdownText.text = count.ToString ();
@@ -83,18 +76,14 @@ public class Countdown : MonoBehaviour {
 	private void SyncTimer(int time)
 	{
 
-		//do setup one time if time at max
-		if (time == START_COUNT_NUM) 
-		{
-			SetupTimer ();
-		}
+
 
 		//show text always on higher numbers
-		if (time >= 0) 
-		{
-			countdownText.gameObject.SetActive(true);
+		if ((time >= 0) && (time <= START_COUNT_NUM)) {
+			countdownText.gameObject.SetActive (true);
+		} else {
+			countdownText.gameObject.SetActive (false);
 		}
-
 
 
 		//update text
