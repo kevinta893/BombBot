@@ -262,7 +262,6 @@ public class BombManager : MonoBehaviour {
 	*/
 	private GameObject DrawBomb(float degrees, float timer)
 	{
-		// TODO ADD MATH FOR PROPER POSITIONING!
 		float radians = degrees * (Mathf.PI / 180);
 		Vector3 position = new Vector3 (Mathf.Cos(radians), Mathf.Sin(radians), 0);
 		position.Normalize ();
@@ -289,7 +288,11 @@ public class BombManager : MonoBehaviour {
 	*/
 	public bool VerifySolution (int id, int solution)
 	{
-		// TODO
-		return true;
+		BombEntity target = GetBombEntity(id);
+		
+		if (target.solution == solution)
+			return true;
+		else
+			return false;
 	}
 }

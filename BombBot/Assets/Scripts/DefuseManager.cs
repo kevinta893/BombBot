@@ -19,7 +19,6 @@ public class DefuseManager : MonoBehaviour {
 	private bool activated;
 
 
-	// Use this for initialization
 	void Start () 
 	{
 	
@@ -30,10 +29,13 @@ public class DefuseManager : MonoBehaviour {
 	 */
 	void Update () 
 	{
-		if (bm.currentBomb == -1)
-			activated = false;
+		if (bm.currentBomb == -1) {
+			ToggleDefuseBox(false);
+			colourAttempt = -1;
+			shapeAttempt = -1;
+		}
 		else
-			activated = true;
+			ToggleDefuseBox(true);
 	}
 
 
@@ -71,26 +73,6 @@ public class DefuseManager : MonoBehaviour {
 	public void ColourClicked (int colour) 
 	{
 		colourAttempt = colour;
-		
-		/*switch (colour)
-		{
-		case 0:	// red
-			//red.colors.pressedColor = new Color(255/255, 0/255, 0/255);
-			//blue.colors.normalColor = new Color(152/255, 152/255, 255/255);
-			//green.colors.normalColor = new Color(152/255, 255/255, 152/255);
-			break;
-		case 1:	// blue
-			red.GetComponent<Image>().color = new Color(255/255, 152/255, 152/255);
-			blue.GetComponent<Image>().color = new Color(0/255, 0/255, 255/255);
-			green.GetComponent<Image>().color = new Color(152/255, 255/255, 152/255);
-			break;
-		case 2: // green
-			red.GetComponent<Image>().color = new Color(255/255, 152/255, 152/255);
-			blue.GetComponent<Image>().color = new Color(152/255, 152/255, 255/255);
-			green.GetComponent<Image>().color = new Color(0/255, 255/255, 0/255);
-			break;
-		}*/
-
 	}
 
 	/*
