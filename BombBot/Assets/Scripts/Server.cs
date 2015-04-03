@@ -57,6 +57,8 @@ public class Server : MonoBehaviour
 			Application.LoadLevel("MainMenu");
 	}
 
+
+
 	/*
 	 * Updates direction indicator of BombBot
 	 */
@@ -106,6 +108,10 @@ public class Server : MonoBehaviour
 		}
 		return false;
 	}
+
+
+
+	public bool HasPlayer() { return Network.connections.Length >= 1; }
 
 
 	//====================================================

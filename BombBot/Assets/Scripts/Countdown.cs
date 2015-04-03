@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
+
 public class Countdown : MonoBehaviour {
 
 	public Text countdownText;
@@ -9,7 +10,7 @@ public class Countdown : MonoBehaviour {
 
 	private int count = 3;
 
-	private bool done = false;
+	private bool done = true;
 
 	private const int START_COUNT_NUM = 3;
 	private const float COUNTDOWN_INTERVAL = 1.0f;
@@ -18,7 +19,7 @@ public class Countdown : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		PlayTimer ();
+
 	}
 	
 	// Update is called once per frame
@@ -38,21 +39,8 @@ public class Countdown : MonoBehaviour {
 
 			count--;
 
-			if (count == 0)
-			{
-				//start text
-				countdownText.text = "START!";
-			}
-			else if (count > 0)
-			{
-				countdownText.text = count.ToString();
-			}
-			else
-			{
-				//negative, hide and finish
-				countdownText.gameObject.SetActive(false);
-				done = true;
-			}
+			networkView.RPC("SyncTimer", RPCMode.All, count);
+		
 
 			countdownTimer = COUNTDOWN_INTERVAL;
 		}
@@ -64,6 +52,12 @@ public class Countdown : MonoBehaviour {
 
 		done = false;
 
+		SetupTimer ();
+	}
+
+	//sets up timer
+	private void SetupTimer()
+	{
 		count = START_COUNT_NUM;
 		countdownText.gameObject.SetActive(true);
 		
@@ -71,9 +65,55 @@ public class Countdown : MonoBehaviour {
 		countdownText.text = count.ToString ();
 	}
 
-	public bool DoneCount()
+
+
+	/*
+	 * Returns true if the countdown is completed 
+	 * false otherwise
+	 */
+	public bool DoneCount(){ return done; }
+
+
+
+
+	//=============================================================
+	//RPC
+
+	[RPC]
+	private void SyncTimer(int time)
 	{
-		return done;
+
+		//do setup one time if time at max
+		if (time == START_COUNT_NUM) 
+		{
+			SetupTimer ();
+		}
+
+		//show text always on higher numbers
+		if (time >= 0) 
+		{
+			countdownText.gameObject.SetActive(true);
+		}
+
+
+
+		//update text
+		if (time > 0)
+		{
+			countdownText.text = time.ToString();
+		}
+		else if (time == 0)
+		{
+			//start text
+			countdownText.text = "START!";
+		}
+		else
+		{
+			//negative, hide and finish
+			countdownText.gameObject.SetActive(false);
+			done = true;
+		}
 	}
+
 
 }

@@ -16,20 +16,24 @@ public class GameManager : MonoBehaviour {
 	private const int HARD_TIMER_MAX = 20;
 	private const int HARD_TIMER_MIN = 15;
 	
-	
+
+	public Countdown countdown;
+	public Server server;
+
 	private int bombsDefused;
 	
 	
 	private const float SPAWN_INTERVAL = 5.0f;
 	private float spawnTimer = SPAWN_INTERVAL;
 	
-	private bool paused;
+	private bool paused = false;
 	
 	// Use this for initialization
 	void Start () 
 	{
 		spawnTimer = SPAWN_INTERVAL;
-		paused = true;
+
+
 	}
 	
 	// Update is called once per frame
@@ -46,6 +50,26 @@ public class GameManager : MonoBehaviour {
 		{
 
 		}
+
+
+		if (server.HasPlayer() == true) 
+		{
+			RunOnce();
+		}
+	}
+
+
+	private bool runned = false;
+
+	private void RunOnce(){
+		if (runned == false) {
+			runned = true;
+
+		} else {
+			return;
+		}
+
+		countdown.PlayTimer ();
 
 	}
 
