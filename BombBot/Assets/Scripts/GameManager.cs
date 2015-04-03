@@ -53,12 +53,31 @@ public class GameManager : MonoBehaviour {
 
 	}
 	
-
-	//Player connected. Start Game.
+	
+	/*
+	 * Player has connected.
+	 */
 	void OnPlayerConnected(NetworkPlayer player) {
 		countdown.PlayTimer ();
 	}
 
+
+	/*
+	 * Player Gains point (bomb defused)
+	 */
+	public void WinPoint()
+	{
+
+	}
+
+
+	/*
+	 * Player loses Life
+	 */
+	public void LoseLife()
+	{
+
+	}
 
 
 	private int PRECISION = 100000000;			//how many floating point numbers to consider
