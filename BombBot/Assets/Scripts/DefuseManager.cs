@@ -71,8 +71,8 @@ public class DefuseManager : MonoBehaviour {
 	public void ColourClicked (int colour) 
 	{
 		colourAttempt = colour;
-
-		switch (colour)
+		
+		/*switch (colour)
 		{
 		case 0:	// red
 			//red.colors.pressedColor = new Color(255/255, 0/255, 0/255);
@@ -80,16 +80,16 @@ public class DefuseManager : MonoBehaviour {
 			//green.colors.normalColor = new Color(152/255, 255/255, 152/255);
 			break;
 		case 1:	// blue
-			/*red.GetComponent<Image>().color = new Color(255/255, 152/255, 152/255);
+			red.GetComponent<Image>().color = new Color(255/255, 152/255, 152/255);
 			blue.GetComponent<Image>().color = new Color(0/255, 0/255, 255/255);
-			green.GetComponent<Image>().color = new Color(152/255, 255/255, 152/255);*/
+			green.GetComponent<Image>().color = new Color(152/255, 255/255, 152/255);
 			break;
 		case 2: // green
 			red.GetComponent<Image>().color = new Color(255/255, 152/255, 152/255);
 			blue.GetComponent<Image>().color = new Color(152/255, 152/255, 255/255);
 			green.GetComponent<Image>().color = new Color(0/255, 255/255, 0/255);
 			break;
-		}
+		}*/
 
 	}
 
