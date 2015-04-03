@@ -46,13 +46,14 @@ public class GameInitializer : MonoBehaviour {
 		this.ip = ipText.text;
 
 		if (ip.Length > 0) {
-			if (Network.peerType == NetworkPeerType.Disconnected) {
-				infoText.text = "Connecting...";
 
-				Network.Connect (ip, port);
+			Network.Disconnect(); 		//always
+			infoText.text = "Connecting...";
 
-				//await confirmination by event
-			}
+			Network.Connect (ip, port);
+
+			//await confirmination by event
+
 		}
 	}
 
