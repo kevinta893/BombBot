@@ -117,10 +117,13 @@ public class BombManager : MonoBehaviour {
 		boomTimer -= dec;
 		
 		// no boom
-		if (boomTimer <= 0)
+		if (boomTimer <= 0) 
+		{
 			boom.text = "";
-		else
+		} else {
 			boom.text = "BOOM!";
+			audio.Play ();
+		}
 	}
 
 
@@ -153,6 +156,22 @@ public class BombManager : MonoBehaviour {
 		        Random.Range (1, 6),
 		        Random.Range (MIN_BOMB_TIMER, MAX_BOMB_TIMER + 1));
 	}
+
+
+
+	/*
+	 * Constructs a random bomb with the given timer.
+	 * Shape, color, and solution generated randomly
+	 */
+	public void ConstructBomb(float timer)
+	{
+		AddBomb(Random.Range (0, 3),
+		        Random.Range (0, 3),
+		        Random.Range (1, 6),
+		        timer);
+	}
+
+
 	
 	/*Debug Use only
 	 *	Generates a bomb given the parameters
@@ -161,6 +180,7 @@ public class BombManager : MonoBehaviour {
 	{
 		AddBomb(shape, colour, solution, timer);
 	}
+
 
 	/*
 	*	Remove a bomb id from the bomb list
