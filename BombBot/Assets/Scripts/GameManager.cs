@@ -64,7 +64,8 @@ public class GameManager : MonoBehaviour {
 
 
 	//Player connected. Start Game.
-	void OnPlayerConnected(NetworkPlayer player) {
+	void OnPlayerConnected(NetworkPlayer player) 
+	{
 
 		waitingText.StopText ();
 
@@ -90,7 +91,7 @@ public class GameManager : MonoBehaviour {
 	public void LoseLife()
 	{
 		lives--;
-		lifeText.text = "Life: " + lives.ToString();
+		lifeText.text = "Lives: " + lives.ToString();
 
 		if (lives == 0) {
 			//game over
@@ -157,7 +158,8 @@ public class GameManager : MonoBehaviour {
 			bombList = new List<BombSpawn>();
 		}
 		
-		public void AddBombSpawn(BombSpawn bombSpawn){
+		public void AddBombSpawn(BombSpawn bombSpawn)
+		{
 			bombList.Add (bombSpawn);
 		}
 		
@@ -166,7 +168,8 @@ public class GameManager : MonoBehaviour {
 			return levelNum;
 		}
 		
-		public BombSpawn[] GetBombsArray(){
+		public BombSpawn[] GetBombsArray()
+		{
 			BombSpawn[] array = new BombSpawn[bombList.Count];
 			bombList.CopyTo (array, 0);
 			return array;
@@ -179,7 +182,8 @@ public class GameManager : MonoBehaviour {
 		private int maxTimer;
 		
 		
-		public BombSpawn(int minTimer, int maxTimer){
+		public BombSpawn(int minTimer, int maxTimer)
+		{
 			
 			this.minTimer = minTimer;
 			this.maxTimer = maxTimer;
@@ -203,7 +207,8 @@ public class GameManager : MonoBehaviour {
 
 
 
-	private void UpdateSpawn(){
+	private void UpdateSpawn()
+	{
 		
 		//run as long as game not over
 		if (spawnPause == true) 
@@ -219,7 +224,8 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	private void InitLevels(){
+	private void InitLevels()
+	{
 		levels = new List<GameLevel> ();
 		
 		
@@ -237,7 +243,10 @@ public class GameManager : MonoBehaviour {
 
 
 
+	private GameLevel NextLevel()
+	{
 
+	}
 
 
 
