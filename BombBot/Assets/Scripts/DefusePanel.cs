@@ -5,15 +5,17 @@ using System.Collections;
 public class DefusePanel : MonoBehaviour {
 
 
-	private static float PANEL_HEIGHT = 0.8f;
+	private static float PANEL_PERCENT_HEIGHT = 0.2f;		//percent height cover from bottom
 	public Canvas canvas;
+
+
 	// Use this for initialization
 	void Start () {
 		RectTransform rectTransform = this.GetComponent<RectTransform> ();
 
 
 
-		rectTransform.offsetMax = new Vector2 (rectTransform.offsetMax.x, -1.0f * Screen.height * canvas.scaleFactor * PANEL_HEIGHT );
+		rectTransform.offsetMax = new Vector2 (rectTransform.offsetMax.x, -1.0f * Screen.height * canvas.scaleFactor * (1.0f - PANEL_PERCENT_HEIGHT));
 
 		//this.transform.position.Set (this.transform.position.x, START_Y - 1000, this.transform.position.z);
 		this.gameObject.SetActive (false);
