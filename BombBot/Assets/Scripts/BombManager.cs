@@ -122,7 +122,7 @@ public class BombManager : MonoBehaviour {
 			boom.text = "";
 		} else {
 			boom.text = "BOOM!";
-			audio.Play ();
+			//audio.PlayOneShot(audio.clip);
 		}
 	}
 

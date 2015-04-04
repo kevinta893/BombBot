@@ -11,6 +11,8 @@ public class ClientNetwork : MonoBehaviour
 	private GameInitializer initialParams;
 
 
+	public AudioClip explodeSound;
+
 	void Start ()
 	{
 		// spawn bombs from client to debug
@@ -163,7 +165,9 @@ public class ClientNetwork : MonoBehaviour
 				} else {
 					Debug.Log ("Destroying Bomb #" + i + "explodedely");
 					// EXPLODE animation
+					AudioSource.PlayClipAtPoint(explodeSound, cursor.obj.transform.position);
 					Destroy(cursor.obj);
+
 					bombList.RemoveAt(i);
 				}
 				break;
