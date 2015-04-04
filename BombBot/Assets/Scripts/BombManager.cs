@@ -98,7 +98,7 @@ public class BombManager : MonoBehaviour {
 				Destroy(cursor.overview);
 				boomTimer = BOOM_PERIOD;
 				boom.text = "BOOM!";
-				audio.Play();					//very loud.
+				audio.PlayOneShot(audio.clip);					//very loud.
 			}
 		} 	
 		
@@ -122,7 +122,7 @@ public class BombManager : MonoBehaviour {
 		{
 			boom.text = "";
 		} else {
-			//audio.Play ();		//TODO i dont think this is the right place to play it
+			boom.text = "BOOM!";
 		}
 	}
 
