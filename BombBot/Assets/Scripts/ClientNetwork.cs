@@ -12,6 +12,8 @@ public class ClientNetwork : MonoBehaviour
 
 
 	public AudioClip explodeSound;
+	public AudioClip correctSound;
+
 
 	void Start ()
 	{
@@ -160,6 +162,7 @@ public class ClientNetwork : MonoBehaviour
 			if (cursor.id == id) {
 				if (safe) {
 					Debug.Log ("Destroying Bomb #" + i + "safely");
+					AudioSource.PlayClipAtPoint(correctSound, cursor.obj.transform.position);
 					Destroy(cursor.obj);
 					bombList.RemoveAt(i);
 				} else {
