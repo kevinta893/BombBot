@@ -5,7 +5,7 @@ using System.Collections;
 public class DefusePanel : MonoBehaviour {
 
 
-	private static int PANEL_HEIGHT = 50;
+	private static float PANEL_HEIGHT = 0.8f;
 	public Canvas canvas;
 	// Use this for initialization
 	void Start () {
@@ -13,7 +13,7 @@ public class DefusePanel : MonoBehaviour {
 
 
 
-		rectTransform.offsetMax = new Vector2 (rectTransform.offsetMax.x, -1*(Screen.height - PANEL_HEIGHT) * canvas.scaleFactor);
+		rectTransform.offsetMax = new Vector2 (rectTransform.offsetMax.x, -1.0f * Screen.height * canvas.scaleFactor * PANEL_HEIGHT );
 
 		//this.transform.position.Set (this.transform.position.x, START_Y - 1000, this.transform.position.z);
 		this.gameObject.SetActive (false);
