@@ -97,7 +97,8 @@ public class BombManager : MonoBehaviour {
 				// remove from overview and show BOOM!
 				Destroy(cursor.overview);
 				boomTimer = BOOM_PERIOD;
-				//audio.Play();					//very loud.
+				boom.text = "BOOM!";
+				audio.Play();					//very loud.
 			}
 		} 	
 		
@@ -121,8 +122,7 @@ public class BombManager : MonoBehaviour {
 		{
 			boom.text = "";
 		} else {
-			boom.text = "BOOM!";
-			audio.Play ();
+			//audio.Play ();		//TODO i dont think this is the right place to play it
 		}
 	}
 
@@ -310,10 +310,26 @@ public class BombManager : MonoBehaviour {
 	{
 		BombEntity target = GetBombEntity(id);
 		
-		if (target.solution == solution)
+		if (target.solution == solution) {
+			// correct solution. GJ BombBot
+			// TODO play success DING sound
+			
+			boom.text = "Bomb defused!";
+			Destroy (target.overview);
+			RemoveBomb(id); 
+			
 			return true;
-		else
+		}
+		else {
+			// incorrect solution. BombBot you dun goofed.
+			Destroy (target.overview);
+			boomTimer = BOOM_PERIOD;
+			boom.text = "BOOM!";
+			audio.Play();			//very loud.
+			RemoveBomb(id);
+			
 			return false;
+		}
 	}
 	
 	/*

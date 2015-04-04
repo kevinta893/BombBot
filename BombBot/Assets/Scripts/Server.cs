@@ -12,6 +12,7 @@ public class Server : MonoBehaviour
 	public Text debugText;
 	public Image indicator;
 	public BombManager bm;
+	public GameManager gm;
 	public Canvas canvas;
 	public Image circle;
 
@@ -157,13 +158,15 @@ public class Server : MonoBehaviour
 	{ 
 		bool success = bm.VerifySolution(id, solution);
 		
-		if (success) {
+		if (success) {	// successful defusion!
 			Debug.Log ("Defused bomb " + id);
 			networkView.RPC ("DestroyBomb", RPCMode.All, id, true);
+			gm.WinPoint();
 		}
 		else {	// bomb go boom!
 			Debug.Log ("Detonating (from expiry) bomb " + id);
 			networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
+			gm.LoseLife();
 		}
 	}
 

@@ -10,7 +10,12 @@ public class DefuseManager : MonoBehaviour {
 	public Button square;
 	public Button circle;
 	public Button triangle;
+	public Button defuse;
+	
 	public Text solution;
+	public Text colourChoice;
+	public Text shapeChoice;
+	
 	public BombManager bm;
 
 	private int colourAttempt;
@@ -37,9 +42,15 @@ public class DefuseManager : MonoBehaviour {
 		}
 		else
 			ToggleDefuseBox(true);
+		
+		// can only defuse if both choices selected
+		if (colourAttempt != -1 && shapeAttempt != -1)
+			defuse.interactable = true;
 	}
 
-
+	/*
+	*	Turn the box on or off depending on if a bomb is looked at
+	*/
 	private void ToggleDefuseBox (bool active)
 	{
 		if (active) 
@@ -59,10 +70,73 @@ public class DefuseManager : MonoBehaviour {
 			square.interactable = false;
 			circle.interactable = false;
 			triangle.interactable = false;
+			defuse.interactable = false;
+			
+			solution.text = "";
+			colourChoice.text = "";
+			shapeChoice.text = "";
 		}
 	}
 	
-	private void CheckSolution ()
+
+
+	//**************************************
+	//**********  Button events ************
+	//**************************************
+
+	/*
+	 * 	Button click event for colour
+	 *  0 = red, 1 = blue, 2 = green
+	 */
+	public void ColourClicked (int colour) 
+	{
+		colourAttempt = colour;
+		
+		switch (colour)
+		{
+		case 0:
+			colourChoice.text = "Red";
+			break;
+		case 1:
+			colourChoice.text = "Blue";
+			break;
+		case 2:
+			colourChoice.text = "Green";
+			break;
+		}
+		
+		solution.text = "";
+	}
+
+	/*
+	 * 	Button click event for shape
+	 *  0 = square, 1 = circle, 2 = tri
+	 */
+	public void ShapeClicked (int shape) 
+	{
+		shapeAttempt = shape;
+		
+		switch (shape)
+		{
+		case 0:
+			shapeChoice.text = "Square";
+			break;
+		case 1:
+			shapeChoice.text = "Circle";
+			break;
+		case 2:
+			shapeChoice.text = "Triangle";
+			break;
+		}
+		
+		solution.text = "";
+	}
+	
+	/*
+	*	Defuse button clicked.
+	*	Show correct solution if correct input, incorrect otherwise.
+	*/
+	public void CheckSolution ()
 	{
 		BombEntity bomb = bm.GetBombEntity(bm.currentBomb);
 		
@@ -79,34 +153,5 @@ public class DefuseManager : MonoBehaviour {
 			
 			solution.text = incorrect.ToString();
 		}
-	}
-
-
-	//**************************************
-	//**********  Button events ************
-	//**************************************
-
-	/*
-	 * 	Button click event for colour
-	 *  0 = red, 1 = blue, 2 = green
-	 */
-	public void ColourClicked (int colour) 
-	{
-		colourAttempt = colour;
-		
-		if (shapeAttempt != -1)
-			CheckSolution();
-	}
-
-	/*
-	 * 	Button click event for shape
-	 *  0 = square, 1 = circle, 2 = tri
-	 */
-	public void ShapeClicked (int shape) 
-	{
-		shapeAttempt = shape;
-		
-		if (colourAttempt != -1)
-			CheckSolution();
 	}
 }

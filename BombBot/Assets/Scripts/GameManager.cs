@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -20,7 +21,8 @@ public class GameManager : MonoBehaviour {
 	public Countdown countdown;
 	public WaitingPlayerText waitingText;
 	public GameObject gameOverText;
-
+	public Text scoreText;
+	public Text lifeText;
 
 	public Server server;
 
@@ -91,6 +93,7 @@ public class GameManager : MonoBehaviour {
 	public void WinPoint()
 	{
 		bombsDefused++;
+		scoreText.text = "Score: " + bombsDefused.ToString();
 	}
 
 
@@ -100,7 +103,7 @@ public class GameManager : MonoBehaviour {
 	public void LoseLife()
 	{
 		lives--;
-		//TODO display life onto UI
+		lifeText.text = "Life: " + lives.ToString();
 
 		if (lives == 0) {
 			//game over
