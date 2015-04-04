@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
+using System.Collections;
 using System.Collections.Generic;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 	
 	//Easy bomb constants
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour {
 	//hard bomb constants
 	private const int HARD_TIMER_MAX = 20;
 	private const int HARD_TIMER_MIN = 15;
-	
+
 
 	public Countdown countdown;
 	public WaitingPlayerText waitingText;
@@ -28,10 +28,8 @@ public class GameManager : MonoBehaviour {
 	public Server server;
 
 	private int bombsDefused = 0;
-	private int lives = 3;
-	
-	private const float SPAWN_INTERVAL = 5.0f;
-	private float spawnTimer = SPAWN_INTERVAL;
+	private const int MAX_LIVES = 700;
+	private int lives = MAX_LIVES;
 	
 	private bool spawnPause = true;
 	private bool gameover = false;
@@ -40,7 +38,9 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () 
 	{
-		spawnTimer = SPAWN_INTERVAL;
+
+		scoreText.text = "Score: " + bombsDefused;
+		lifeText.text = "Lives: " + lives;
 
 		waitingText.StartText ();
 		InitLevels ();
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour {
 
 		waitingText.StopText ();
 
-		countdown.PlayTimer ();
+		StartLevel ();
 
 
 	}
@@ -144,14 +144,32 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	static void ShuffleList<T>(List<T> list)
+	{
+		
+		for (int i = 0; i < list.Count; i++)
+		{
+			//find random index to swap
+			int j = Random.Range(i, list.Count);
+			
+			//swap
+			T temp = list[i];
+			list[i] = list[j];
+			list[j] = temp;
+		}
+	}
+
 
 	//=========================================================
 	// Private classes
+
+
 	private class GameLevel{
 		
 		private int levelNum;
 		private List<BombSpawn> bombList;
-		
+
+
 		public GameLevel(int levelNum)
 		{
 			this.levelNum = levelNum;
@@ -168,43 +186,65 @@ public class GameManager : MonoBehaviour {
 			return levelNum;
 		}
 		
-		public BombSpawn[] GetBombsArray()
+		public List<BombSpawn> GetBombsList()
 		{
-			BombSpawn[] array = new BombSpawn[bombList.Count];
-			bombList.CopyTo (array, 0);
-			return array;
+			return bombList;
 		}
+
+		/*
+		 * Shuffles bomb list
+		 */ 
+		public void ShuffleBombSpawns(){
+			ShuffleList (this.bombList);
+		}
+
 	}
 	
 	private class BombSpawn{
 		
 		private int minTimer;
 		private int maxTimer;
+		private float deltaDelay;		//delay for the CURRENT bomb, not the next bomb, delay is time between bombs, not from start of level
 		
-		
-		public BombSpawn(int minTimer, int maxTimer)
+		public BombSpawn(int minTimer, int maxTimer, float deltaDelay)
 		{
 			
 			this.minTimer = minTimer;
 			this.maxTimer = maxTimer;
-			
+			this.deltaDelay = deltaDelay;
 		}
 		
 		/*
 		 * Gets a random timer value (integer) between min and max specified.
 		 */
-		public float GetRandomTimer(){
+		public float GetRandomTimer()
+		{
 			return Random.Range(minTimer, maxTimer);
 		}
+
+		public float GetDelay()
+		{
+			return deltaDelay;
+		}
+
+
 	}
 
 
 	//==========================================================
 	//Bomb Spawning methods
 
+	public BombManager bm;
+
 	private List<GameLevel> levels;
 
+	private List<BombSpawn> bombQueue;
 
+	private float spawnTimer = 0.0f;
+
+	private bool waitFinishLevel = false;
+	private int currentLevel = 0;
+	private int bombGoal = 0;
 
 
 	private void UpdateSpawn()
@@ -217,40 +257,105 @@ public class GameManager : MonoBehaviour {
 		}
 		
 		spawnTimer -= Time.deltaTime;
-		
+
+
+		//spawn
 		if (spawnTimer <= 0.0f) 
 		{
-			//spawn thing
+			Debug.Log (bombQueue.Count);
+			//spawn next bomb now
+			bm.ConstructBomb(bombQueue[0].GetRandomTimer());
+			bombQueue.RemoveAt(0);
+
+			if (bombQueue.Count == 0)
+			{
+				//no bombs left, wait until player has destroyed all bombs.
+				spawnPause = true;
+				waitFinishLevel = false;		//wait until player finishes all bombs
+
+			}else{
+				//another bomb in queue, spawn with delay
+				spawnTimer = bombQueue[0].GetDelay();
+			}
 		}
+
+
+		//wait until next level
+		if (waitFinishLevel == true) 
+		{
+
+			if (bombsDefused == (bombGoal - (MAX_LIVES - lives)))
+			{
+				waitFinishLevel = false;
+				LoadNextLevel();
+			}
+
+			if (bombsDefused > bombGoal){
+				Debug.Log ("Warning! Went over bomb goal");
+			}
+		}
+
 	}
 
+
+
+	private void StartLevel()
+	{
+		countdown.PlayTimer (this);
+	}
+
+	//start level
+	public void CountDownFinishedCallback(){
+		spawnPause = false;
+	}
+
+
+	/*
+	 * Load the next level goals and spawn list
+	 */
+	private void LoadNextLevel()
+	{
+		//level complete, throw it out
+		bombQueue = levels [0].GetBombsList ();
+
+		spawnTimer = bombQueue [0].GetDelay ();
+		bombGoal += bombQueue.Count;
+
+		levels.RemoveAt (0);
+		//all one has to do now is set spawnPause = false; to start
+	}
+
+
+
+	/*
+	 * Initializes the levels. Declare predefined levels here.
+	 * First level is ready to load
+	 */
 	private void InitLevels()
 	{
 		levels = new List<GameLevel> ();
 		
-		
+
 		//level1
 		GameLevel level1 = new GameLevel (1);
 		levels.Add (level1);
-		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN,EASY_TIMER_MAX));
-		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN,EASY_TIMER_MAX));
-		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN,EASY_TIMER_MAX));
-		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN,EASY_TIMER_MAX));
-		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN,EASY_TIMER_MAX));
-		
-		
+		/*
+		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, 2.0f));
+		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range (4,10)));
+		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range (4,10)));
+		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range (4,10)));
+		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range (4,10)));
+		*/
+
+		//debug Level
+		level1.AddBombSpawn (new BombSpawn(3, 5, 1.0f));
+		level1.AddBombSpawn (new BombSpawn(3, 5, 2.0f));
+		level1.AddBombSpawn (new BombSpawn(3, 5, 3.0f));
+		level1.AddBombSpawn (new BombSpawn(3, 5, 4.0f));
+		level1.AddBombSpawn (new BombSpawn(3, 5, 5.0f));
+
+		LoadNextLevel ();
 	}
-
-
-
-	private GameLevel NextLevel()
-	{
-		//TODO
-		return null;
-	}
-
-
-
 
 
 

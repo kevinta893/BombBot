@@ -45,7 +45,7 @@ public class BombManager : MonoBehaviour {
 	void Update()
 	{
 		// decrement timers
-		UpdateSpawnTimer(Time.deltaTime);
+		//UpdateSpawnTimer(Time.deltaTime);
 		UpdateBombTimers(Time.deltaTime);
 		UpdateBoomTimer(Time.deltaTime);
 		

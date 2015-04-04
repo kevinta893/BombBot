@@ -15,6 +15,8 @@ public class Countdown : MonoBehaviour {
 	private const int START_COUNT_NUM = 3;
 	private const float COUNTDOWN_INTERVAL = 1.0f;
 
+	private CountDownFinishCallback callbackFinish;
+
 
 	// Use this for initialization
 	void Start () 
@@ -49,15 +51,32 @@ public class Countdown : MonoBehaviour {
 
 	public void PlayTimer ()
 	{
+		callbackFinish = null;
+		SetupTimer ();
+	}
 
+
+	/*
+	 * Plays the timer and calls back on the method
+	 * Does not play callback on clients. Only the caller that
+	 * plays the countdown will have its callback played.
+	 */
+	public void PlayTimer(CountDownFinishCallback callback)		//only for the caller, do not apply to clients
+	{
+		callbackFinish = callback;
+		SetupTimer ();
+	}
+
+
+	private void SetupTimer()
+	{
 		done = false;
-
+		
 		count = START_COUNT_NUM + 1;			//1 second delay before starting
 		
 		countdownTimer = COUNTDOWN_INTERVAL;
 		countdownText.text = count.ToString ();
 	}
-
 
 
 	/*
@@ -101,8 +120,18 @@ public class Countdown : MonoBehaviour {
 			//negative, hide and finish
 			countdownText.gameObject.SetActive(false);
 			done = true;
+
+			if (callbackFinish != null)
+			{
+				callbackFinish.CountDownFinishedCallback();
+			}
 		}
 	}
 
-
+	public interface CountDownFinishCallback
+	{
+		void CountDownFinishedCallback();
+	}
 }
+
+
