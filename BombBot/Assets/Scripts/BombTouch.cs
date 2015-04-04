@@ -7,7 +7,7 @@ public class BombTouch : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+	/*
 		RaycastHit target;
 		
 		// detect platform so both touch and mouse work
@@ -29,7 +29,7 @@ public class BombTouch : MonoBehaviour {
 					Defuse (target);
 			}
 		}
-		
+	*/
 	}
 
 	/*

@@ -9,7 +9,7 @@ public class ClientNetwork : MonoBehaviour
 	private GUIStyle myStyle;
 
 	private GameInitializer initialParams;
-
+	private int currentBomb;
 
 	public AudioClip explodeSound;
 	public AudioClip correctSound;
@@ -23,6 +23,8 @@ public class ClientNetwork : MonoBehaviour
 		}*/
 		//initialParams = (GameInitializer) GameObject.Find ("GameInitializer").GetComponent("GameInitializer");
 		//this.IP = initialParams.GetIP ();
+		
+		currentBomb = -1;
 	}
 
 	void Update()
@@ -51,31 +53,32 @@ public class ClientNetwork : MonoBehaviour
 	*/
 	public void SendCurrentBomb(GameObject bomb) 
 	{
-		int id = -1;	// return -1 if not looking at bomb
-		
 		if (bomb != null) 
 		{
 			// find id of current bomb
 			for (int i = 0; i < bombList.Count; i++) {
 				BombObject tmp = (BombObject) bombList[i];
 				if (tmp.obj == bomb) {
-					id = tmp.id;
+					currentBomb = tmp.id;
 					break;
+				}
+				else {
+					currentBomb = -1;
 				}
 			}
 		}
-		Debug.Log("Sending current bomb id " + id);
-		networkView.RPC ("CurrentBomb", RPCMode.Server, id);
+		Debug.Log("Sending current bomb id " + currentBomb);
+		networkView.RPC ("CurrentBomb", RPCMode.Server, currentBomb);
 	}
 	[RPC]
 	void CurrentBomb (int id) { }
 	
 	/*
-	*	Send the server the attempted solution
+	*	Send the server the attempted solution for the current bomb
 	*/
-	public void AttemptDefuse(int id, int solution)
+	public void AttemptDefuse(int solution)
 	{
-		networkView.RPC ("CheckSolution", RPCMode.Server, id, solution);
+		networkView.RPC ("CheckSolution", RPCMode.Server, currentBomb, solution);
 	}
 	[RPC]
 	void CheckSolution (int id, int solution) { }

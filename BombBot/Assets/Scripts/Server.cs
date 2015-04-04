@@ -205,6 +205,7 @@ public class Server : MonoBehaviour
 	public void DetonateBomb(int id)
 	{
 		Debug.Log ("Detonating (from expiry) bomb " + id);
+		gm.LoseLife();
 		networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
 	}
 	

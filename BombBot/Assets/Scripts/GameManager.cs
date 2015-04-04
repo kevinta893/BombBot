@@ -245,7 +245,8 @@ public class GameManager : MonoBehaviour {
 
 	private GameLevel NextLevel()
 	{
-
+		//TODO
+		return null;
 	}
 
 

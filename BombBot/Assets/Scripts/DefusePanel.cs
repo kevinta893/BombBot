@@ -7,7 +7,7 @@ public class DefusePanel : MonoBehaviour {
 
 	private static float PANEL_PERCENT_HEIGHT = 0.2f;		//percent height cover from bottom
 	public Canvas canvas;
-
+	public ClientNetwork client;
 
 	// Use this for initialization
 	void Start () {
@@ -36,5 +36,12 @@ public class DefusePanel : MonoBehaviour {
 		Debug.Log ("SHowing");
 		//this.transform.position.Set (this.transform.position.x, START_Y + 1000, this.transform.position.z);
 		this.gameObject.SetActive (true);
+	}
+	
+	/*
+	*	Attempt this solution to defuse current bomb
+	*/
+	public void DefuseButton(int solutionAttempt) {
+		client.AttemptDefuse(solutionAttempt);
 	}
 }

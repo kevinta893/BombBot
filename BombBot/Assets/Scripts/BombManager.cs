@@ -45,7 +45,7 @@ public class BombManager : MonoBehaviour {
 	void Update()
 	{
 		// decrement timers
-		//UpdateSpawnTimer(Time.deltaTime);
+		UpdateSpawnTimer(Time.deltaTime);
 		UpdateBombTimers(Time.deltaTime);
 		UpdateBoomTimer(Time.deltaTime);
 		
@@ -336,12 +336,13 @@ public class BombManager : MonoBehaviour {
 	*	DEBUG USE: Print out solution for debug
 	*/
 	public string PrintSolution() 
-	{
+	{/*
 		if (currentBomb == -1)
 			return "\nCurrent: -1";
 		else {
 			BombEntity tmp = GetBombEntity(currentBomb);
 			return 	"\nCurrent: " + currentBomb + " Sol: " + tmp.solution + " " + tmp.colour + "/" + tmp.shape;
-		}
+		}*/
+		return "";
 	}
 }
