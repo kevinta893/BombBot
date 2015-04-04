@@ -171,4 +171,11 @@ public class ClientNetwork : MonoBehaviour
 		}
 	}
 
+
+	[RPC]
+	private void SendGameOver()
+	{
+		//TODO Gameover, stop movement, clear all bombs, show gameover label, prompt user to press ESC
+	}
+
 }

@@ -15,9 +15,14 @@ public class WaitingPlayerText : MonoBehaviour {
 	private int animateCursor = 0;
 
 
+	public Text waitingText;
+	public Text ipSubText;
+
+
 	// Use this for initialization
 	void Start () {
 		StartText ();
+
 	}
 	
 	// Update is called once per frame
@@ -33,7 +38,7 @@ public class WaitingPlayerText : MonoBehaviour {
 		
 		if (updateTimer <= 0.0f) 
 		{
-			this.GetComponent<Text>().text = WAITING_FOR_PLAYER_TEXT + animatedText[animateCursor];
+			waitingText.text = WAITING_FOR_PLAYER_TEXT + animatedText[animateCursor];
 			animateCursor = (animateCursor + 1) % animatedText.Length;
 
 			updateTimer = UPDATE_INTERVAL;
@@ -43,6 +48,7 @@ public class WaitingPlayerText : MonoBehaviour {
 	public void StartText()
 	{
 		animateCursor = 0;
+		ipSubText.text = "Server IP: " + Network.player.ipAddress;
 		this.gameObject.SetActive (true);
 		running = true;
 	}

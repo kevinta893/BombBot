@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour {
 		spawnTimer = SPAWN_INTERVAL;
 
 		waitingText.StartText ();
+
 	}
 	
 	// Update is called once per frame
@@ -99,7 +100,7 @@ public class GameManager : MonoBehaviour {
 	public void LoseLife()
 	{
 		lives--;
-
+		//TODO display life onto UI
 
 		if (lives == 0) {
 			//game over
