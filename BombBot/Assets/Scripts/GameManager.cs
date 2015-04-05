@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 		gameOverPanel.ShowPanel (bombsDefused);
 
-		server.GameOver ();
+		server.GameOver (bombsDefused);
 	}
 
 

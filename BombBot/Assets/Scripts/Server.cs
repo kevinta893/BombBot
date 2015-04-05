@@ -113,8 +113,8 @@ public class Server : MonoBehaviour
 	}
 
 
-	public void GameOver(){
-		networkView.RPC ("SendGameOver", RPCMode.Others);
+	public void GameOver(int finalScore){
+		networkView.RPC ("SendGameOver", RPCMode.Others, finalScore);
 	}
 
 
@@ -132,6 +132,8 @@ public class Server : MonoBehaviour
 	{
 
 	}
+
+
 	//====================================================
 	//From client methods
 
@@ -219,7 +221,7 @@ public class Server : MonoBehaviour
 	
 	
 	[RPC]
-	private void SendGameOver(){}
+	public void SendGameOver(int finalScore){}
 	
 	
 	

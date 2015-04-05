@@ -3,6 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 
 
+
+/*
+ * Note this class must be enabled on both ends because the networkview
+ * needs to send calls to both objects with the same network view ID
+ * Otherwise the RPC calls from other network views will be caught here.
+ * 
+ * Ensure Network IDs are the same in the components
+ */
 public class Countdown : MonoBehaviour {
 
 	public Text countdownText;

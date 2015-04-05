@@ -14,6 +14,7 @@ public class ClientNetwork : MonoBehaviour
 	public AudioClip explodeSound;
 	public AudioClip correctSound;
 
+	public GameOverPanel gameOverPanel;
 
 	void Start ()
 	{
@@ -33,6 +34,26 @@ public class ClientNetwork : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.Escape)) 
 			Application.LoadLevel("MainMenu");
 	}
+
+
+
+	/*
+	 * Lost connection, end game.
+	 */
+	void OnDisconnectedFromServer(NetworkDisconnection info) 
+	{
+		//Network.Disconnect ();
+
+		gameOverPanel.ShowPanelConnectionLost ();
+	}
+
+
+	void GameOver()
+	{
+		//TODO Gameover, stop movement, clear all bombs
+
+	}
+
 
 	//================================================================================
 	//To server functions
@@ -183,9 +204,11 @@ public class ClientNetwork : MonoBehaviour
 
 
 	[RPC]
-	private void SendGameOver()
+	public void SendGameOver(int finalScore)
 	{
-		//TODO Gameover, stop movement, clear all bombs, show gameover label, prompt user to press ESC
+
+		gameOverPanel.ShowPanel (finalScore);
+		GameOver ();
 	}
 
 }
