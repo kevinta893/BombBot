@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 	public Countdown countdown;
 	public WaitingPlayerText waitingText;
-	public GameObject gameOverText;
+	public GameObject gameOverPanel;
+	public Text gameOverText;
 	public NextRoundPanel nextRoundPanel;
 
 	public Text scoreText;
@@ -107,11 +108,33 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 		spawnPause = true;
 		gameover = true;
 
-		gameOverText.SetActive (true);
+		gameOverPanel.SetActive (true);
 
 		server.GameOver ();
 	}
 
+
+
+	void OnPlayerDisconnected(NetworkPlayer player) 
+	{
+		//lost connection to player, set gameover
+		gameOverText.text = "Lost player connection";
+		gameOverPanel.SetActive (true);
+
+		GameOver ();
+
+		Network.Disconnect ();		//shutdown server
+	}
+
+
+	/*
+	 * Game over by connection lost
+	 */
+	private void ConnectionLostGameOver()
+	{
+
+
+	}
 
 
 	//==========================================================

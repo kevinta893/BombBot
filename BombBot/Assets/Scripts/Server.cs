@@ -125,8 +125,13 @@ public class Server : MonoBehaviour
 
 	}
 
+	/*
+	 * Player disconnected
+	 */
+	void OnPlayerDisconnected(NetworkPlayer player) 
+	{
 
-
+	}
 	//====================================================
 	//From client methods
 
