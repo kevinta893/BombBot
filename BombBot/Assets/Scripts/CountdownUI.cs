@@ -11,7 +11,7 @@ using System.Collections;
  * 
  * Ensure Network IDs are the same in the components
  */
-public class Countdown : MonoBehaviour {
+public class CountdownUI : MonoBehaviour {
 
 	public Text countdownText;
 	private float countdownTimer;

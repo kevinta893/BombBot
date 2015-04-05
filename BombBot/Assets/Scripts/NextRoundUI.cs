@@ -2,13 +2,16 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class NextRoundPanel : MonoBehaviour {
+public class NextRoundUI : MonoBehaviour {
 
-
+	public GameObject nextRoundPanel;
 	public Text completedRoundText;
+
 	public Button nextRoundButton;
 	public Text nextRoundButtonText;
 	
+	public bool useButton;
+	public bool startShown;				//shows the next round as "start" on startup
 
 	private bool show = false;
 
@@ -16,34 +19,43 @@ public class NextRoundPanel : MonoBehaviour {
 	private float HIDE_ALPHA_DELTA= 0.05f;
 
 	private float MAX_ALPHA_PANEL = 0.8f;
+	private float currentAlpha = 0.0f;
+
 
 	// Use this for initialization
 	void Start () {
-		SetAlpha (0.0f);
-		HidePanel ();
+
+
+		if (startShown == true) {
+			ShowPanel (0);
+			SetAlpha (1.0f);
+		} else {
+			SetAlpha (0.0f);
+			HidePanel ();
+		}
+
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 
-
-		Color current = this.GetComponent<Image> ().color;
-		float alpha = current.a + (show == true ? SHOW_ALPHA_DELTA : -1 * HIDE_ALPHA_DELTA);
-
-		alpha = (alpha <= 0.0f) ? 0.0f : alpha;
-		alpha = (alpha >= 1.0f) ? 1.0f : alpha;
-
-		SetAlpha (alpha);
 		
+		currentAlpha = currentAlpha + (show == true ? SHOW_ALPHA_DELTA : -1 * HIDE_ALPHA_DELTA);
 
-		nextRoundButton.gameObject.SetActive (show);
+		currentAlpha = (currentAlpha <= 0.0f) ? 0.0f : currentAlpha;
+		currentAlpha = (currentAlpha >= 1.0f) ? 1.0f : currentAlpha;
+
+		SetAlpha (currentAlpha);
+
+		SetButtonActive(show);
 	}
 
 	private void SetAlpha(float alpha){
 
-		Color current = this.GetComponent<Image> ().color;
-		this.GetComponent<Image> ().color = new Color (current.r, current.g, current.b, Mathf.Min (alpha, MAX_ALPHA_PANEL));
+		Color current = nextRoundPanel.GetComponent<Image> ().color;
+		nextRoundPanel.GetComponent<Image> ().color = new Color (current.r, current.g, current.b, Mathf.Min (alpha, MAX_ALPHA_PANEL));
 
 		Color currentText = completedRoundText.GetComponent<Text> ().color;
 		completedRoundText.GetComponent<Text> ().color = new Color (currentText.r, currentText.g, currentText.b, alpha);
@@ -61,6 +73,8 @@ public class NextRoundPanel : MonoBehaviour {
 	 */
 	public void ShowPanel(int levelComplete)
 	{
+		nextRoundPanel.SetActive (true);
+
 		if (levelComplete == 0) {
 			completedRoundText.text = "Ready to play?";
 		} else {
@@ -68,9 +82,11 @@ public class NextRoundPanel : MonoBehaviour {
 		}
 
 		nextRoundButtonText.text = "Start Round " + (levelComplete + 1);
-		nextRoundButton.gameObject.SetActive (true);
+		SetButtonActive(true);
 		show = true;
 	}
+
+
 
 
 	/*
@@ -78,9 +94,14 @@ public class NextRoundPanel : MonoBehaviour {
 	 */
 	public void HidePanel()
 	{
+		SetButtonActive(false);
 		show = false;
-		nextRoundButton.gameObject.SetActive (false);
 	}
 
 
+
+	private void SetButtonActive(bool val)
+	{
+		nextRoundButton.gameObject.SetActive (val && useButton);
+	}
 }

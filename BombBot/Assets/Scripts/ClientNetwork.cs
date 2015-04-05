@@ -15,7 +15,7 @@ public class ClientNetwork : MonoBehaviour
 	public AudioClip correctSound;
 
 	public GameOverPanel gameOverPanel;
-
+	public NextRoundUI nextRoundUI;
 	void Start ()
 	{
 		// spawn bombs from client to debug
@@ -209,6 +209,20 @@ public class ClientNetwork : MonoBehaviour
 
 		gameOverPanel.ShowPanel (finalScore);
 		GameOver ();
+	}
+
+
+	
+	[RPC]
+	public void SendEndLevel(int levelCompleted)
+	{
+		nextRoundUI.ShowPanel (levelCompleted);
+	}
+	
+	[RPC]
+	public void SendStartNewLevel(int level)
+	{
+		nextRoundUI.HidePanel ();
 	}
 
 }

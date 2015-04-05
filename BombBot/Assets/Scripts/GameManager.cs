@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
+public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 
 	
 	//Easy bomb constants
@@ -19,10 +19,10 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 	private const int HARD_TIMER_MIN = 15;
 
 
-	public Countdown countdown;
+	public CountdownUI countdown;
 	public WaitingPlayerText waitingText;
 	public GameOverPanel gameOverPanel;
-	public NextRoundPanel nextRoundPanel;
+	public NextRoundUI nextRoundPanel;
 
 	public Text scoreText;
 	public Text lifeText;
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 	public Server server;
 
 	private int bombsDefused = 0;
-	private const int MAX_LIVES = 3;
+	private const int MAX_LIVES = 700;
 	private int lives = MAX_LIVES;
 	
 	private bool spawnPause = true;
@@ -71,7 +71,6 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 	{
 
 		waitingText.StopText ();
-
 		LoadNextLevel ();		//begin game by loading the next level
 
 
@@ -276,9 +275,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 			if (bombsDefused == (bombGoal - (MAX_LIVES - lives)))
 			{
 				//finished level 
-				currentLevel++;
-				waitFinishLevel = false;
-				LoadNextLevel();
+				FinishLevel();
 			}
 			
 			if (bombsDefused > bombGoal){
@@ -321,10 +318,19 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 	}
 
+	private void FinishLevel()
+	{
+
+		currentLevel++;
+		waitFinishLevel = false;
+		server.InformLevelComplete (currentLevel);
+		LoadNextLevel();
+	}
 
 
 	public void StartLevel()
 	{
+		server.InformLevelStart (currentLevel);
 		countdown.PlayTimer (this);
 	}
 
@@ -376,7 +382,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 		//debug Level
 		level1.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
-		level1.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
+		level1.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
 
 		GameLevel level2 = new GameLevel (2);
 		levels.Add (level2);

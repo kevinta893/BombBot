@@ -117,6 +117,14 @@ public class Server : MonoBehaviour
 		networkView.RPC ("SendGameOver", RPCMode.Others, finalScore);
 	}
 
+	public void InformLevelComplete(int completedLevel){
+		networkView.RPC ("SendEndLevel", RPCMode.Others, completedLevel);
+	}
+
+	public void InformLevelStart(int startingLevel){
+		networkView.RPC ("SendStartNewLevel", RPCMode.Others, startingLevel);
+	}
+
 
 	/*
 	 * Player has connected.
@@ -225,9 +233,11 @@ public class Server : MonoBehaviour
 	
 	
 	
+	[RPC]
+	public void SendEndLevel(int levelCompleted){}
 	
-	
-	
+	[RPC]
+	public void SendStartNewLevel(int level){}
 	
 	
 }
