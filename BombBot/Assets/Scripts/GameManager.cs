@@ -21,8 +21,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 	public Countdown countdown;
 	public WaitingPlayerText waitingText;
-	public GameObject gameOverPanel;
-	public Text gameOverText;
+	public GameOverPanel gameOverPanel;
 	public NextRoundPanel nextRoundPanel;
 
 	public Text scoreText;
@@ -95,7 +94,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 	public void LoseLife()
 	{
 		lives--;
-		lifeText.text = "Lives: " + lives.ToString();
+		lifeText.text = "Lives: " + ((lives <= 0 ) ? 0 : lives);
 
 		if (lives == 0) {
 			//game over
@@ -108,18 +107,20 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 		spawnPause = true;
 		gameover = true;
 
-		gameOverPanel.SetActive (true);
+		gameOverPanel.ShowPanel (bombsDefused);
 
 		server.GameOver ();
 	}
 
 
 
+	/*
+	 * Do game over if we lose connection
+	 */
 	void OnPlayerDisconnected(NetworkPlayer player) 
 	{
 		//lost connection to player, set gameover
-		gameOverText.text = "Lost player connection";
-		gameOverPanel.SetActive (true);
+		gameOverPanel.ShowPanelConnectionLost (bombsDefused);
 
 		GameOver ();
 
@@ -127,14 +128,6 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 	}
 
 
-	/*
-	 * Game over by connection lost
-	 */
-	private void ConnectionLostGameOver()
-	{
-
-
-	}
 
 
 	//==========================================================
@@ -306,7 +299,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 		//spawn
 		if (spawnTimer <= 0.0f) 
 		{
-			Debug.Log (bombQueue.Count);
+
 			//spawn next bomb now
 			bm.ConstructBomb(bombQueue[0].GetRandomTimer());
 			bombQueue.RemoveAt(0);
