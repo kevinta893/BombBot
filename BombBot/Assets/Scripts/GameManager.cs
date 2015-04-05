@@ -22,13 +22,15 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 	public Countdown countdown;
 	public WaitingPlayerText waitingText;
 	public GameObject gameOverText;
+	public NextRoundPanel nextRoundPanel;
+
 	public Text scoreText;
 	public Text lifeText;
 
 	public Server server;
 
 	private int bombsDefused = 0;
-	private const int MAX_LIVES = 700;
+	private const int MAX_LIVES = 3;
 	private int lives = MAX_LIVES;
 	
 	private bool spawnPause = true;
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 		scoreText.text = "Score: " + bombsDefused;
 		lifeText.text = "Lives: " + lives;
 
+		nextRoundPanel.gameObject.SetActive (true);
 		waitingText.StartText ();
 		InitLevels ();
 	}
@@ -69,7 +72,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 		waitingText.StopText ();
 
-		StartLevel ();
+		LoadNextLevel ();		//begin game by loading the next level
 
 
 	}
@@ -249,7 +252,25 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 	private void UpdateSpawn()
 	{
-		
+
+		//wait until next level
+		if (waitFinishLevel == true) 
+		{
+			
+			if (bombsDefused == (bombGoal - (MAX_LIVES - lives)))
+			{
+				//finished level 
+				currentLevel++;
+				waitFinishLevel = false;
+				LoadNextLevel();
+			}
+			
+			if (bombsDefused > bombGoal){
+				Debug.Log ("Warning! Went over bomb goal");
+			}
+		}
+
+
 		//run as long as game not over
 		if (spawnPause == true) 
 		{
@@ -271,7 +292,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 			{
 				//no bombs left, wait until player has destroyed all bombs.
 				spawnPause = true;
-				waitFinishLevel = false;		//wait until player finishes all bombs
+				waitFinishLevel = true;		//wait until player finishes all bombs
 
 			}else{
 				//another bomb in queue, spawn with delay
@@ -280,26 +301,13 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 		}
 
 
-		//wait until next level
-		if (waitFinishLevel == true) 
-		{
 
-			if (bombsDefused == (bombGoal - (MAX_LIVES - lives)))
-			{
-				waitFinishLevel = false;
-				LoadNextLevel();
-			}
-
-			if (bombsDefused > bombGoal){
-				Debug.Log ("Warning! Went over bomb goal");
-			}
-		}
 
 	}
 
 
 
-	private void StartLevel()
+	public void StartLevel()
 	{
 		countdown.PlayTimer (this);
 	}
@@ -312,6 +320,7 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 
 	/*
 	 * Load the next level goals and spawn list
+	 * Shows the start round menu to start
 	 */
 	private void LoadNextLevel()
 	{
@@ -322,6 +331,8 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 		bombGoal += bombQueue.Count;
 
 		levels.RemoveAt (0);
+		nextRoundPanel.ShowPanel (currentLevel);
+		
 		//all one has to do now is set spawnPause = false; to start
 	}
 
@@ -348,13 +359,24 @@ public class GameManager : MonoBehaviour, Countdown.CountDownFinishCallback {
 		*/
 
 		//debug Level
-		level1.AddBombSpawn (new BombSpawn(3, 5, 1.0f));
-		level1.AddBombSpawn (new BombSpawn(3, 5, 2.0f));
-		level1.AddBombSpawn (new BombSpawn(3, 5, 3.0f));
-		level1.AddBombSpawn (new BombSpawn(3, 5, 4.0f));
-		level1.AddBombSpawn (new BombSpawn(3, 5, 5.0f));
+		level1.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
+		level1.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
 
-		LoadNextLevel ();
+		GameLevel level2 = new GameLevel (2);
+		levels.Add (level2);
+		level2.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
+		level2.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
+
+		GameLevel level3 = new GameLevel (3);
+		levels.Add (level3);
+		level3.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
+		level3.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
+
+		GameLevel level4 = new GameLevel (4);
+		levels.Add (level4);
+		level4.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
+		level4.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
+
 	}
 
 
