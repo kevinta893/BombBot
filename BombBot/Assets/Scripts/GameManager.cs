@@ -419,7 +419,7 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 		levels.Add (level2);
 		level2.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
 		level2.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
-
+		/*
 		GameLevel level3 = new GameLevel (3);
 		levels.Add (level3);
 		level3.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
@@ -429,7 +429,7 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 		levels.Add (level4);
 		level4.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
 		level4.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
-
+*/
 	}
 
 

@@ -50,6 +50,11 @@ public class NextRoundUI : MonoBehaviour {
 		SetAlpha (currentAlpha);
 
 		SetButtonActive(show);
+
+		if (currentAlpha == 0.0f) {
+			//turn off panel on zero opacity
+			nextRoundPanel.SetActive (false);
+		}
 	}
 
 	private void SetAlpha(float alpha){
