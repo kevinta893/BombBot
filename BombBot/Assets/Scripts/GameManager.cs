@@ -346,19 +346,50 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 	 */
 	private void LoadNextLevel()
 	{
-		//level complete, throw it out
-		bombQueue = levels [0].GetBombsList ();
 
-		spawnTimer = bombQueue [0].GetDelay ();
-		bombGoal += bombQueue.Count;
+		if (levels.Count > 0) {
+			//level complete, throw it out
+			bombQueue = levels [0].GetBombsList ();
 
-		levels.RemoveAt (0);
-		nextRoundPanel.ShowPanel (currentLevel);
+			spawnTimer = bombQueue [0].GetDelay ();
+			bombGoal += bombQueue.Count;
+
+			levels.RemoveAt (0);
+			nextRoundPanel.ShowPanel (currentLevel);
 		
+			lastLevelBombCount = bombQueue.Count;			//for record keeping 
+		} else {
+			//no more levels, generate endless
+			GenerateNextEndlessLevel();
+			LoadNextLevel();		//call self as we have made a level
+		}
 		//all one has to do now is set spawnPause = false; to start
 	}
 
 
+	private int lastLevelBombCount;
+	private const int MAX_BOMBS_PER_ENDLESS_LEVEL = 20;
+
+	private void GenerateNextEndlessLevel()
+	{
+		GameLevel newLevel = new GameLevel (currentLevel);
+		levels.Add (newLevel);
+
+		lastLevelBombCount += 2;
+		lastLevelBombCount = lastLevelBombCount >= MAX_BOMBS_PER_ENDLESS_LEVEL ? MAX_BOMBS_PER_ENDLESS_LEVEL : lastLevelBombCount;
+
+		for (int i =0; i < lastLevelBombCount+2; i++) 
+		{
+			if (i == 0){
+				//first bomb should spawn close to immediate
+				newLevel.AddBombSpawn(new BombSpawn(HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(1,3)));
+			}else{
+				newLevel.AddBombSpawn(new BombSpawn(HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(3,6)));
+			}
+		}
+
+
+	}
 
 	/*
 	 * Initializes the levels. Declare predefined levels here.
