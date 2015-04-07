@@ -27,7 +27,7 @@ public class Server : MonoBehaviour
 	void Start ()
 	{
 		INDICATOR_RADIUS = canvas.scaleFactor * circle.rectTransform.rect.height* 0.25f;
-		Debug.Log (circle.rectTransform.rect.height);
+
 		CENTER_RADAR = indicator.transform.position;
 		UpdateRadar (Quaternion.identity);
 
