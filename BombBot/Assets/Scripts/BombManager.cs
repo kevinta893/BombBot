@@ -175,7 +175,10 @@ public class BombManager : MonoBehaviour {
 		}
 	}
 
-
+	public int GetActiveBombCount()
+	{
+		return bombList.Count;
+	}
 
 
 	/**************************************************************************
@@ -250,7 +253,15 @@ public class BombManager : MonoBehaviour {
 		return false;
 	}
 	
-	
+
+	/*
+	 * Randomizes the initial degree offset when generating bombs
+	 */
+	public void RandomizeInitDegrees()
+	{
+		INIT_DEGREE_OFFSET = Random.Range (0, 360);
+	}
+
 	/**************************************************************************
 	**************************   BOMB DRAWING   *******************************
 	**************************************************************************/

@@ -5,19 +5,6 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 
-	
-	//Easy bomb constants
-	private const int EASY_TIMER_MAX = 45;
-	private const int EASY_TIMER_MIN = 30;
-	
-	//Medium bomb constants
-	private const int MED_TIMER_MAX = 30;
-	private const int MED_TIMER_MIN = 20;
-	
-	//hard bomb constants
-	private const int HARD_TIMER_MAX = 20;
-	private const int HARD_TIMER_MIN = 15;
-
 
 	public CountdownUI countdown;
 	public WaitingPlayerText waitingText;
@@ -252,6 +239,21 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 	//==========================================================
 	//Bomb Spawning methods
 
+
+	//Easy bomb constants
+	private const int EASY_TIMER_MAX = 30;
+	private const int EASY_TIMER_MIN = 20;
+	
+	//Medium bomb constants
+	private const int MED_TIMER_MAX = 25;
+	private const int MED_TIMER_MIN = 15;
+	
+	//hard bomb constants
+	private const int HARD_TIMER_MAX = 22;
+	private const int HARD_TIMER_MIN = 12;
+
+
+
 	public BombManager bm;
 
 	private List<GameLevel> levels;
@@ -264,6 +266,8 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 	private int currentLevel = 0;
 	private int bombGoal = 0;
 
+	private int MAX_ACTIVE_BOMBS = 4;
+	private bool maxBombsReached = false;
 
 	private void UpdateSpawn()
 	{
@@ -284,7 +288,10 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 		}
 
 
-		//run as long as game not over
+
+
+
+		//run as long as spawner not paused
 		if (spawnPause == true) 
 		{
 			return;
@@ -297,20 +304,40 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 		if (spawnTimer <= 0.0f) 
 		{
 
-			//spawn next bomb now
-			bm.ConstructBomb(bombQueue[0].GetRandomTimer());
-			bombQueue.RemoveAt(0);
 
-			if (bombQueue.Count == 0)
+			if (bm.GetActiveBombCount() < MAX_ACTIVE_BOMBS)
 			{
-				//no bombs left, wait until player has destroyed all bombs.
-				spawnPause = true;
-				waitFinishLevel = true;		//wait until player finishes all bombs
 
-			}else{
+
+				if (maxBombsReached == false){
+					//spawn next bomb now, we have not reached cap
+					bm.ConstructBomb(bombQueue[0].GetRandomTimer());
+					bombQueue.RemoveAt(0);
+				}
+				else{
+					//dont spawn right away, instead set the designated spawn time for next bomb
+				}
+
 				//another bomb in queue, spawn with delay
-				spawnTimer = bombQueue[0].GetDelay();
+				if (bombQueue.Count <= 0)
+				{
+					//no bombs left, wait until player has destroyed all bombs.
+					spawnPause = true;
+					waitFinishLevel = true;		//wait until player finishes all bombs
+					
+				}else{
+					spawnTimer = bombQueue[0].GetDelay();
+				}
+
+				maxBombsReached = false;		//done last to allow waiting for designated next spawn timer
 			}
+			else{
+				//bombcount is greater, then wait 2 seconds to see if we can drop one in soon
+				spawnTimer = 2.0f;
+				maxBombsReached = true;
+
+			}
+			
 		}
 
 
@@ -358,11 +385,15 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 			nextRoundPanel.ShowPanel (currentLevel);
 		
 			lastLevelBombCount = bombQueue.Count;			//for record keeping 
+
+			bm.RandomizeInitDegrees();						//make level fresh by making positions less predictable
 		} else {
 			//no more levels, generate endless
 			GenerateNextEndlessLevel();
 			LoadNextLevel();		//call self as we have made a level
 		}
+
+
 		//all one has to do now is set spawnPause = false; to start
 	}
 
@@ -370,12 +401,14 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 	private int lastLevelBombCount;
 	private const int MAX_BOMBS_PER_ENDLESS_LEVEL = 20;
 
+	private const int BOMB_INCREMENT_PER_LEVEL = 2;		//how many more bombs from the last endless round to increase by
+
 	private void GenerateNextEndlessLevel()
 	{
 		GameLevel newLevel = new GameLevel (currentLevel);
 		levels.Add (newLevel);
 
-		lastLevelBombCount += 2;
+		lastLevelBombCount += BOMB_INCREMENT_PER_LEVEL;
 		lastLevelBombCount = lastLevelBombCount >= MAX_BOMBS_PER_ENDLESS_LEVEL ? MAX_BOMBS_PER_ENDLESS_LEVEL : lastLevelBombCount;
 
 		for (int i =0; i < lastLevelBombCount+2; i++) 
@@ -384,7 +417,7 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 				//first bomb should spawn close to immediate
 				newLevel.AddBombSpawn(new BombSpawn(HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(1,3)));
 			}else{
-				newLevel.AddBombSpawn(new BombSpawn(HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(3,6)));
+				newLevel.AddBombSpawn(new BombSpawn(HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
 			}
 		}
 
@@ -403,14 +436,44 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 		//level1
 		GameLevel level1 = new GameLevel (1);
 		levels.Add (level1);
-		/*
 		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, 2.0f));
 		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range (4,10)));
-		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range (4,10)));
-		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range (4,10)));
-		level1.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range (4,10)));
-		*/
 
+		//level2
+		GameLevel level2 = new GameLevel (2);
+		levels.Add (level2);
+		level2.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range(2,3)));
+		level2.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range(3,6)));
+		level2.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range(3,6)));
+		level2.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range(2,3)));
+
+
+		GameLevel level3 = new GameLevel (3);
+		levels.Add (level3);
+		level3.AddBombSpawn (new BombSpawn (MED_TIMER_MIN, MED_TIMER_MAX, Random.Range(2,6)));
+		level3.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range(2,6)));
+		level3.AddBombSpawn (new BombSpawn (MED_TIMER_MIN, MED_TIMER_MAX, Random.Range(2,6)));
+		level3.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range(2,6)));
+
+		GameLevel level4 = new GameLevel (4);
+		levels.Add (level4);
+		level4.AddBombSpawn (new BombSpawn (MED_TIMER_MIN, MED_TIMER_MAX, Random.Range(2,6)));
+		level4.AddBombSpawn (new BombSpawn (HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
+		level4.AddBombSpawn (new BombSpawn (EASY_TIMER_MIN, EASY_TIMER_MAX, Random.Range(2,6)));
+		level4.AddBombSpawn (new BombSpawn (MED_TIMER_MIN, MED_TIMER_MAX, Random.Range(2,6)));
+		level4.AddBombSpawn (new BombSpawn (HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
+
+		GameLevel level5 = new GameLevel (5);
+		levels.Add (level5);
+		level5.AddBombSpawn (new BombSpawn (HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
+		level5.AddBombSpawn (new BombSpawn (HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
+		level5.AddBombSpawn (new BombSpawn (HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
+		level5.AddBombSpawn (new BombSpawn (HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
+		level5.AddBombSpawn (new BombSpawn (HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
+
+
+
+		/*
 		//debug Level
 		level1.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
 		level1.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
@@ -419,17 +482,8 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 		levels.Add (level2);
 		level2.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
 		level2.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
-		/*
-		GameLevel level3 = new GameLevel (3);
-		levels.Add (level3);
-		level3.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
-		level3.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
-
-		GameLevel level4 = new GameLevel (4);
-		levels.Add (level4);
-		level4.AddBombSpawn (new BombSpawn(1, 1, 1.0f));
-		level4.AddBombSpawn (new BombSpawn(1, 1, 2.0f));
-*/
+		*/
+		
 	}
 
 
