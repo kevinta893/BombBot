@@ -12,12 +12,11 @@ public class BombManager : MonoBehaviour {
 	public GameObject overviewBomb;
 	public Image circle;
 	public Canvas canvas;
-	public Text boom;		// a poor man's explosion	
-
+	public AudioClip explodeSound;
+	public AudioClip correctSound;
 
 	private int idCount;
 	private float spawnTimer;
-	private float boomTimer;
 	private ArrayList bombList = new ArrayList (Server.MAX_BOMBS);
 	private float OVERVIEW_RADIUS;
 	
@@ -35,7 +34,6 @@ public class BombManager : MonoBehaviour {
 	{
 		idCount = 1;
 		spawnTimer = 0;
-		boomTimer = 0;
 		OVERVIEW_RADIUS = canvas.scaleFactor * circle.rectTransform.rect.height* 0.35f;
 		currentBomb = -1;
 		
@@ -47,7 +45,6 @@ public class BombManager : MonoBehaviour {
 		// decrement timers
 		//UpdateSpawnTimer(Time.deltaTime);
 		UpdateBombTimers(Time.deltaTime);
-		UpdateBoomTimer(Time.deltaTime);
 		
 	}
 
@@ -95,10 +92,10 @@ public class BombManager : MonoBehaviour {
 				toRemove.Add(cursor);
 				
 				// remove from overview and show BOOM!
-				Destroy(cursor.overview);
-				boomTimer = BOOM_PERIOD;
-				boom.text = "BOOM!";
-				audio.PlayOneShot(audio.clip);					//very loud.
+				cursor.overview.SendMessage("Explode");
+				Destroy(cursor.overview, 1f);		// destroy bomb in 1 sec
+				AudioSource.PlayClipAtPoint(explodeSound, gameObject.transform.position);
+				audio.PlayOneShot(audio.clip);		//very loud.
 			}
 		} 	
 		
@@ -109,24 +106,6 @@ public class BombManager : MonoBehaviour {
 		}
 	}
 	
-	
-	/*
-	*	Show the boom text for a short time then remove
-	*/
-	private void UpdateBoomTimer(float dec)
-	{
-		boomTimer -= dec;
-		
-		// no boom
-		if (boomTimer <= 0) 
-		{
-			boom.text = "";
-		} else {
-			boom.text = "BOOM!";
-		}
-	}
-
-
 	/* Find bomb by id
 	 * Returns null if not found
 	 */
@@ -312,20 +291,17 @@ public class BombManager : MonoBehaviour {
 		
 		if (target.solution == solution) {
 			// correct solution. GJ BombBot
-			// TODO play success DING sound
-			
-			boom.text = "Bomb defused!";
 			Destroy (target.overview);
-			RemoveBomb(id); 
+			RemoveBomb(id);
+			AudioSource.PlayClipAtPoint(correctSound, gameObject.transform.position);
 			
 			return true;
 		}
 		else {
 			// incorrect solution. BombBot you dun goofed.
-			Destroy (target.overview);
-			boomTimer = BOOM_PERIOD;
-			boom.text = "BOOM!";
-			audio.Play();			//very loud.
+			target.overview.SendMessage("Explode");
+			Destroy(target.overview, 1f);		// destroy bomb in 1 sec
+			AudioSource.PlayClipAtPoint(explodeSound, gameObject.transform.position);
 			RemoveBomb(id);
 			
 			return false;
