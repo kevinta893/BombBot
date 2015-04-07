@@ -57,13 +57,19 @@ public class ClientNetwork : MonoBehaviour
 
 	//================================================================================
 	//To server functions
-	
+
+	private int camThrottle;
+	private const int SKIP_SEND = 3;				//set to 1 for no throttle
+
 	/*
 	*	Send the camera state to the server
 	*/
 	public void SendCameraData (Quaternion rotation)
 	{
-		networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
+		if (camThrottle == 0) {
+			networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
+		}
+		camThrottle = (camThrottle + 1) % SKIP_SEND;
 	}
 	[RPC]
 	void UpdateCamera (Quaternion rotation) { }
