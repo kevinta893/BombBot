@@ -10,9 +10,11 @@ public class ClientNetwork : MonoBehaviour
 
 	private GameInitializer initialParams;
 	private int currentBomb;
+	private float hurtTimer;
 
 	public AudioClip explodeSound;
 	public AudioClip correctSound;
+	public GameObject hurtFilter;
 
 	public GameOverPanel gameOverPanel;
 	public NextRoundUI nextRoundUI;
@@ -26,6 +28,7 @@ public class ClientNetwork : MonoBehaviour
 		//this.IP = initialParams.GetIP ();
 		
 		currentBomb = -1;
+		hurtTimer = 0.0f;
 	}
 
 	void Update()
@@ -33,6 +36,13 @@ public class ClientNetwork : MonoBehaviour
 		// quit current mode
 		if (Input.GetKeyDown(KeyCode.Escape)) 
 			Application.LoadLevel("MainMenu");
+			
+		if (hurtTimer > 0.0f) {
+			hurtTimer -= Time.deltaTime;
+		} else {
+			hurtTimer = 0.0f;
+			hurtFilter.SetActive(false);
+		}
 	}
 
 
@@ -198,6 +208,9 @@ public class ClientNetwork : MonoBehaviour
 				} else {
 					Debug.Log ("Destroying Bomb #" + i + "explodedely");
 					// EXPLODE animation
+					hurtTimer = 0.2f;
+					hurtFilter.SetActive(true);
+					
 					AudioSource.PlayClipAtPoint(explodeSound, cursor.obj.transform.position);
 					Destroy(cursor.obj);
 

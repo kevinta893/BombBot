@@ -21,7 +21,6 @@ public class BombManager : MonoBehaviour {
 	private float OVERVIEW_RADIUS;
 	
 	//Random parameters
-	private float BOOM_PERIOD = 1.0f;
 	private float SPAWN_PERIOD = 5.0f;
 	private const int MIN_BOMB_TIMER = 10;
 	private const int MAX_BOMB_TIMER = 30;			//inclusive

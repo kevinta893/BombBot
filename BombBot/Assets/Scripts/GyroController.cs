@@ -36,8 +36,6 @@ public class GyroController : MonoBehaviour
 			AttachGyro();
 	}
 
-	//private int ddd =0;
-
 	protected void Update() 
 	{
 		RaycastBombs ();
