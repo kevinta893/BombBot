@@ -301,7 +301,8 @@ public class BombManager : MonoBehaviour {
 		
 		if (target.solution == solution) {
 			// correct solution. GJ BombBot
-			Destroy (target.overview);
+			target.overview.SendMessage("Correct");
+			Destroy (target.overview, 1f);
 			RemoveBomb(id);
 			AudioSource.PlayClipAtPoint(correctSound, gameObject.transform.position);
 			
