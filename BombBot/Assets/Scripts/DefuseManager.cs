@@ -139,19 +139,22 @@ public class DefuseManager : MonoBehaviour {
 	public void CheckSolution ()
 	{
 		BombEntity bomb = bm.GetBombEntity(bm.currentBomb);
-		
-		if (bomb.colour == colourAttempt && bomb.shape == shapeAttempt)
-		{	// output correct solution
-			solution.text = bomb.solution.ToString();
-		}
-		else
-		{	// output incorrect solution
-			int incorrect;
-			do {
-				incorrect = Random.Range (1, 6);
-			} while (incorrect == bomb.solution);
+		if (bomb != null) {
+
+
+			if ((bomb.colour == colourAttempt) && (bomb.shape == shapeAttempt)) {	// output correct solution
+				solution.text = bomb.solution.ToString ();
+			} else {	// output incorrect solution
+				int incorrect;
+				do {
+					incorrect = Random.Range (1, 6);
+				} while (incorrect == bomb.solution);
 			
-			solution.text = incorrect.ToString();
+				solution.text = incorrect.ToString ();
+			}
+		} else {
+			int incorrect = Random.Range (1, 6);
+			solution.text = incorrect.ToString ();
 		}
 	}
 }
