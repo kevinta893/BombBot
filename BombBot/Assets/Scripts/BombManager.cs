@@ -94,7 +94,7 @@ public class BombManager : MonoBehaviour {
 				cursor.overview.SendMessage("Explode");
 				Destroy(cursor.overview, 1f);		// destroy bomb in 1 sec
 				AudioSource.PlayClipAtPoint(explodeSound, gameObject.transform.position);
-				audio.PlayOneShot(audio.clip);		//very loud.
+
 			}
 		} 	
 		
