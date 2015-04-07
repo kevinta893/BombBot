@@ -11,13 +11,19 @@ public class ClientNetwork : MonoBehaviour
 	private GameInitializer initialParams;
 	private int currentBomb;
 	private float hurtTimer;
+	private float correctTimer;
 
 	public AudioClip explodeSound;
 	public AudioClip correctSound;
 	public GameObject hurtFilter;
+	private const float HURT_DURATION = 0.3f;
+	public GameObject correctImage;
+	private const float CORRECT_DURATION = 1.0f;
 
 	public GameOverPanel gameOverPanel;
 	public NextRoundUI nextRoundUI;
+
+
 	void Start ()
 	{
 		// spawn bombs from client to debug
@@ -42,6 +48,13 @@ public class ClientNetwork : MonoBehaviour
 		} else {
 			hurtTimer = 0.0f;
 			hurtFilter.SetActive(false);
+		}
+
+		if (correctTimer > 0.0f) {
+			correctTimer -= Time.deltaTime;
+		} else {
+			correctTimer = 0.0f;
+			correctImage.SetActive(false);
 		}
 	}
 
@@ -202,13 +215,16 @@ public class ClientNetwork : MonoBehaviour
 			if (cursor.id == id) {
 				if (safe) {
 					Debug.Log ("Destroying Bomb #" + i + "safely");
+					correctTimer = CORRECT_DURATION;
+					correctImage.SetActive(true);
+
 					AudioSource.PlayClipAtPoint(correctSound, cursor.obj.transform.position);
 					Destroy(cursor.obj);
 					bombList.RemoveAt(i);
 				} else {
 					Debug.Log ("Destroying Bomb #" + i + "explodedely");
 					// EXPLODE animation
-					hurtTimer = 0.2f;
+					hurtTimer = HURT_DURATION;
 					hurtFilter.SetActive(true);
 					
 					AudioSource.PlayClipAtPoint(explodeSound, cursor.obj.transform.position);
