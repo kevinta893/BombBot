@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 	public Server server;
 
 	private int bombsDefused = 0;
-	private const int MAX_LIVES = 700;
-	private int lives = MAX_LIVES;
+	public int MAX_LIVES = 700;
+	private int lives;
 	
 	private bool spawnPause = true;
 	private bool gameover = false;
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 	// Use this for initialization
 	void Start () 
 	{
-
+		lives = MAX_LIVES;
 		scoreText.text = "Score: " + bombsDefused;
 		lifeText.text = "Lives: " + lives;
 
