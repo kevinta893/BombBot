@@ -123,32 +123,6 @@ public class GyroController : MonoBehaviour
 		               2 * (q.x * q.y + q.w * q.z),
 		               2 * (q.x * q.z - q.w * q.y));
 	}
-
-
-
-	protected void OnGUI()
-	{
-		GUIStyle customStyle = new GUIStyle ();
-		
-		// set font size accordingly	
-		if (platform == RuntimePlatform.Android) {
-			customStyle.fontSize = 30;
-		}
-		else {
-			customStyle.fontSize = 12;
-		}
-		
-		if (!debug)
-			return;
-		
-		GUILayout.Label("Orientation: " + Screen.orientation, customStyle);
-		GUILayout.Label("Calibration: " + calibration, customStyle);
-		GUILayout.Label("Camera base: " + cameraBase, customStyle);
-		GUILayout.Label("input.gyro.attitude: " + Input.gyro.attitude, customStyle);
-		GUILayout.Label("transform.rotation: " + transform.rotation, customStyle);
-		GUILayout.Label ("My IP: " + Network.player.ipAddress, customStyle);
-		
-	}
 	
 	#endregion
 	
