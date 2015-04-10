@@ -403,9 +403,6 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 
 	private const int BOMB_INCREMENT_PER_LEVEL = 2;		//how many more bombs from the last endless round to increase by
 
-	private const int ENDLESS_MIN_TIMER = 24;
-	private const int ENDLESS_MAX_TIMER = 30;
-
 	private void GenerateNextEndlessLevel()
 	{
 		GameLevel newLevel = new GameLevel (currentLevel);
@@ -418,9 +415,9 @@ public class GameManager : MonoBehaviour, CountdownUI.CountDownFinishCallback {
 		{
 			if (i == 0){
 				//first bomb should spawn close to immediate
-				newLevel.AddBombSpawn(new BombSpawn(ENDLESS_MIN_TIMER, ENDLESS_MAX_TIMER, Random.Range(1,3)));
+				newLevel.AddBombSpawn(new BombSpawn(HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(1,3)));
 			}else{
-				newLevel.AddBombSpawn(new BombSpawn(ENDLESS_MIN_TIMER, ENDLESS_MAX_TIMER, Random.Range(4,8)));
+				newLevel.AddBombSpawn(new BombSpawn(HARD_TIMER_MIN, HARD_TIMER_MAX, Random.Range(2,6)));
 			}
 		}
 
