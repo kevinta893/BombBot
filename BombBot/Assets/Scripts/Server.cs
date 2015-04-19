@@ -114,15 +114,15 @@ public class Server : MonoBehaviour
 
 
 	public void GameOver(int finalScore){
-		networkView.RPC ("SendGameOver", RPCMode.Others, finalScore);
+		GetComponent<NetworkView>().RPC ("SendGameOver", RPCMode.Others, finalScore);
 	}
 
 	public void InformLevelComplete(int completedLevel){
-		networkView.RPC ("SendEndLevel", RPCMode.Others, completedLevel);
+		GetComponent<NetworkView>().RPC ("SendEndLevel", RPCMode.Others, completedLevel);
 	}
 
 	public void InformLevelStart(int startingLevel){
-		networkView.RPC ("SendStartNewLevel", RPCMode.Others, startingLevel);
+		GetComponent<NetworkView>().RPC ("SendStartNewLevel", RPCMode.Others, startingLevel);
 	}
 
 
@@ -175,12 +175,12 @@ public class Server : MonoBehaviour
 		
 		if (success) {	// successful defusion!
 			Debug.Log ("Defused bomb " + id);
-			networkView.RPC ("DestroyBomb", RPCMode.All, id, true);
+			GetComponent<NetworkView>().RPC ("DestroyBomb", RPCMode.All, id, true);
 			gm.WinPoint();
 		}
 		else {	// bomb go boom!
 			Debug.Log ("Detonating (from expiry) bomb " + id);
-			networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
+			GetComponent<NetworkView>().RPC ("DestroyBomb", RPCMode.All, id, false);
 			gm.LoseLife();
 		}
 	}
@@ -207,7 +207,7 @@ public class Server : MonoBehaviour
 		if (bomb.position == -1) {
 			Debug.LogError ("Error, too many bombs on scene, position returned: " + bomb.position);
 		}
-		networkView.RPC ("SpawnBomb", RPCMode.All, bomb.id, bomb.shape, bomb.colour, bomb.degrees);
+		GetComponent<NetworkView>().RPC ("SpawnBomb", RPCMode.All, bomb.id, bomb.shape, bomb.colour, bomb.degrees);
 		
 	}
 	[RPC]	// blank RPC method on client
@@ -221,7 +221,7 @@ public class Server : MonoBehaviour
 	{
 		Debug.Log ("Detonating (from expiry) bomb " + id);
 		gm.LoseLife();
-		networkView.RPC ("DestroyBomb", RPCMode.All, id, false);
+		GetComponent<NetworkView>().RPC ("DestroyBomb", RPCMode.All, id, false);
 	}
 	
 	[RPC]	// blank RPC method on client

@@ -66,11 +66,11 @@ public class GyroController : MonoBehaviour
 			float vertical = Input.GetAxis ("Vertical");
 	
 			if (horizontal != 0.0) {
-				camera.transform.RotateAround(camera.transform.position, Vector3.up, 1.0f * horizontal);
+				GetComponent<Camera>().transform.RotateAround(GetComponent<Camera>().transform.position, Vector3.up, 1.0f * horizontal);
 			}
 			if (vertical != 0.0) {
-				Vector3 left = GetRightVector(camera.transform.rotation) * -1.0f;
-				camera.transform.RotateAround(camera.transform.position, left, 1.0f * vertical);
+				Vector3 left = GetRightVector(GetComponent<Camera>().transform.rotation) * -1.0f;
+				GetComponent<Camera>().transform.RotateAround(GetComponent<Camera>().transform.position, left, 1.0f * vertical);
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class GyroController : MonoBehaviour
 
 		RaycastHit objLooked;
 		
-		bool lookBomb =  Physics.Raycast(new Ray(camera.transform.position, GetForwardVector(camera.transform.rotation)), out objLooked, RAYCAST_LOOK_DISTANCE);
+		bool lookBomb =  Physics.Raycast(new Ray(GetComponent<Camera>().transform.position, GetForwardVector(GetComponent<Camera>().transform.rotation)), out objLooked, RAYCAST_LOOK_DISTANCE);
 		if (lookBomb == true) {
 			//looking at a particular bomb
 			GameObject bombLook = objLooked.transform.gameObject;

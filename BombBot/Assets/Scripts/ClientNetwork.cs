@@ -90,7 +90,7 @@ public class ClientNetwork : MonoBehaviour
 	public void SendCameraData (Quaternion rotation)
 	{
 		if (camThrottle == 0) {
-			networkView.RPC ("UpdateCamera", RPCMode.Server, rotation);
+			GetComponent<NetworkView>().RPC ("UpdateCamera", RPCMode.Server, rotation);
 		}
 		camThrottle = (camThrottle + 1) % SKIP_SEND;
 	}
@@ -118,7 +118,7 @@ public class ClientNetwork : MonoBehaviour
 			}
 		}
 		Debug.Log("Sending current bomb id " + currentBomb);
-		networkView.RPC ("CurrentBomb", RPCMode.Server, currentBomb);
+		GetComponent<NetworkView>().RPC ("CurrentBomb", RPCMode.Server, currentBomb);
 	}
 	[RPC]
 	void CurrentBomb (int id) { }
@@ -128,7 +128,7 @@ public class ClientNetwork : MonoBehaviour
 	*/
 	public void AttemptDefuse(int solution)
 	{
-		networkView.RPC ("CheckSolution", RPCMode.Server, currentBomb, solution);
+		GetComponent<NetworkView>().RPC ("CheckSolution", RPCMode.Server, currentBomb, solution);
 	}
 	[RPC]
 	void CheckSolution (int id, int solution) { }
@@ -188,7 +188,7 @@ public class ClientNetwork : MonoBehaviour
 
 		// generate bomb with proper shape and colour
 		GameObject obj = (GameObject) Instantiate (selection, position, Quaternion.identity);
-		obj.renderer.material.color = bombColour;
+		obj.GetComponent<Renderer>().material.color = bombColour;
 
 		BombObject bomb = new BombObject(id, degreesLoc, obj);
 		bombList.Add(bomb);

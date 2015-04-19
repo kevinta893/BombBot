@@ -49,7 +49,7 @@ public class CountdownUI : MonoBehaviour {
 
 			count--;
 
-			networkView.RPC("SyncTimer", RPCMode.All, count);
+			GetComponent<NetworkView>().RPC("SyncTimer", RPCMode.All, count);
 		
 
 			countdownTimer = COUNTDOWN_INTERVAL;
